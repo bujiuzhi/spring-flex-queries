@@ -1,0 +1,92 @@
+{
+  "info": {
+    "_postman_id": "2ea77a9a-3714-48c5-bc48-ccbf3f10ca51",
+    "name": "models",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "31082839"
+  },
+  "item": [
+    {
+      "name": "search",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    // \"model_id\" : \"2\",\n    // \"model_name\" : \"模型2\",\n    \"label\" : \"监控场景2\"\n    // \"train_data_percentage\": \"70\",\n    // \"test_data_percentage\": \"30\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/models/search",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "model_id",
+              "value": "1",
+              "disabled": true
+            },
+            {
+              "key": "model_name",
+              "value": "模型1",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "manage",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"model_id\" : \"9\",\n    \"model_name\" : \"模型3\"\n    // \"label\" : \"监控场景2\"\n    // \"train_data_percentage\": \"70\",\n    // \"test_data_percentage\": \"30\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/models/insert",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "insert"
+          ],
+          "query": [
+            {
+              "key": "model_id",
+              "value": "1",
+              "disabled": true
+            },
+            {
+              "key": "model_name",
+              "value": "模型1",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
