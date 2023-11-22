@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306
+    username: root
+    password: '19990102'
+logging:
+  level:
+    org:
+      springframework:
+        web: INFO
+        validation: INFO
+
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true #?????????????????
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  port: 8080

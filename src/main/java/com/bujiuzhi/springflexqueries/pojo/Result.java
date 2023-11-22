@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 封装好的结果集对象，用于返回操作结果。
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
