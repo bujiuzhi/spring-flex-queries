@@ -13,7 +13,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    // \"modelId\": \"mod001\",\n    \"modelCategory\": [\n        \"信用模型\",\n        \"归因模型\"\n    ],\n    \"sampleDivision\": [\n        \"训练数据\"\n    ],\n    \"modelAlgorithm\": [\n        \"k-means\"\n    ],\n    \"triggerMechanism\": [\n        \"指标预警\",\n        \"定期触发\",\n        \"手工触发\"\n    ],\n    // \"creationTimeStart\": \"2023-01-01 04:00:00\",\n    \"creationTimeEnd\": \"2023-01-02 07:00:00\",\n    \"pageNumber\": 1,\n    \"pageSize\": 8\n}",
+          "raw": "{\n    // \"modelId\": \"mod001\",\n    \"modelCategory\": [\n        \"信用模型\",\n        \"归因模型\"\n    ],\n    \"sampleDivision\": [\n        \"训练数据\"\n    ],\n    \"algorithmName\": [\n        \"k-means\"\n    ],\n    \"triggerMechanism\": [\n        \"指标预警\",\n        \"定期触发\",\n        \"手工触发\"\n    ],\n    // \"creationTimeStart\": \"2023-01-01 04:00:00\",\n    \"creationTimeEnd\": \"2023-01-02 07:00:00\",\n    \"pageNumber\": 1,\n    \"pageSize\": 8\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -54,7 +54,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"modelId\": \"mod001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"更新后的信用评分模型\",\n    \"modelCategory\": \"信用模型\",\n    \"modelAlgorithm\": \"updated_k-means\",\n    \"algorithmParameters\": \"{\\\"clusters\\\": 6, \\\"iterations\\\": 150}\",\n    \"sampleDivision\": \"训练数据\",\n    \"trainingProgress\": \"50%\",\n    \"modelStatus\": \"训练中\",\n    \"triggerMechanism\": \"指标预警\",\n    \"creator\": \"张三\",\n    \"creationTime\": \"2023-01-01 01:00:00\",\n    \"updater\": \"李四\",\n    \"updateTime\": \"2023-11-22 15:00:00\",\n    \"lastTrainingTime\": \"2023-11-22 14:00:00\",\n    \"lastTrainingDuration\": \"2小时\",\n    \"taskDescription\": \"信用评分模型的更新训练\",\n    \"successCriteria\": \"{\\\"accuracy\\\": 0.93}\",\n    \"dataSet\": \"credit_score_training_v2\",\n    \"dataSetStartDate\": \"2023-01-01\",\n    \"dataSetEndDate\": \"2023-06-01\",\n    \"trainingDataPercentage\": 60.0,\n    \"testDataPercentage\": 40.0,\n    \"samplingMethod\": \"随机\",\n    \"performanceMetrics\": \"{\\\"AUC\\\": 0.91}\",\n    \"updateFrequency\": \"每天\",\n    \"monitoringFrequency\": \"每天\",\n    \"optimizationGoal\": \"最大化AUC值\",\n    \"effectiveTime\": \"{\\\"start\\\": \\\"2023-11-22 00:00:00\\\", \\\"end\\\": \\\"2024-11-22 00:00:00\\\"}\",\n    \"monitoringScenario\": \"信用风险\",\n    \"modelPmml\": \"<PMML_data>\",\n    \"sampleData\": \"<Sample_data>\"\n}",
+          "raw": "{\n    \"modelId\": \"mod001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"更新后的信用评分模型\",\n    \"modelCategory\": \"信用模型\",\n    \"algorithmName\": \"updated_k-means\",\n    \"algorithmParameters\": \"{\\\"clusters\\\": 6, \\\"iterations\\\": 150}\",\n    \"sampleDivision\": \"训练数据\",\n    \"trainingProgress\": \"50%\",\n    \"modelStatus\": \"训练中\",\n    \"triggerMechanism\": \"指标预警\",\n    \"lastTrainingTime\": \"2023-11-22 14:00:00\",\n    \"lastTrainingDuration\": \"2小时\",\n    \"taskDescription\": \"信用评分模型的更新训练\",\n    \"successCriteria\": \"{\\\"accuracy\\\": 0.93}\",\n    \"dataSet\": \"credit_score_training_v2\",\n    \"dataSetStartDate\": \"2023-01-01\",\n    \"dataSetEndDate\": \"2023-06-01\",\n    \"trainingDataPercentage\": 60.0,\n    \"testDataPercentage\": 40.0,\n    \"samplingMethod\": \"随机\",\n    \"performanceMetrics\": \"{\\\"AUC\\\": 0.91}\",\n    \"updateFrequency\": \"每天\",\n    \"monitoringFrequency\": \"每天\",\n    \"optimizationGoal\": \"最大化AUC值\",\n    \"effectiveTime\": \"{\\\"start\\\": \\\"2023-11-22 00:00:00\\\", \\\"end\\\": \\\"2024-11-22 00:00:00\\\"}\",\n    \"monitoringScenario\": \"信用风险\",\n    \"modelPmml\": \"<PMML_data>\",\n    \"sampleData\": \"<Sample_data>\",\n    \"creator\": \"张三\",\n    \"creationTime\": \"2023-01-01 01:00:00\",\n    \"updater\": \"李四\",\n    \"updateTime\": \"2023-11-22 15:00:00\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -95,7 +95,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"modelId\": \"mod006\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"新的模型\",\n    \"modelCategory\": \"新的分类\",\n    \"modelAlgorithm\": \"new_algorithm\",\n    \"algorithmParameters\": \"{\\\"param1\\\": 10, \\\"param2\\\": 20}\",\n    \"sampleDivision\": \"新的样本划分\",\n    \"trainingProgress\": \"30%\",\n    \"modelStatus\": \"待训练\",\n    \"triggerMechanism\": \"手工触发\",\n    \"creator\": \"王五\",\n    \"creationTime\": \"2023-11-23 08:00:00\",\n    \"updater\": \"\",\n    \"updateTime\": \"\",\n    \"lastTrainingTime\": \"\",\n    \"lastTrainingDuration\": \"\",\n    \"taskDescription\": \"新模型的训练任务\",\n    \"successCriteria\": \"{\\\"accuracy\\\": 0.95}\",\n    \"dataSet\": \"new_dataset\",\n    \"dataSetStartDate\": \"2023-11-23\",\n    \"dataSetEndDate\": \"2023-12-31\",\n    \"trainingDataPercentage\": 70.0,\n    \"testDataPercentage\": 30.0,\n    \"samplingMethod\": \"分层\",\n    \"performanceMetrics\": \"{\\\"F1\\\": 0.94}\",\n    \"updateFrequency\": \"每周\",\n    \"monitoringFrequency\": \"每周\",\n    \"optimizationGoal\": \"最小化误差\",\n    \"effectiveTime\": \"{\\\"start\\\": \\\"2023-11-23 00:00:00\\\", \\\"end\\\": \\\"2024-12-31 00:00:00\\\"}\",\n    \"monitoringScenario\": \"新的监控场景\",\n    \"modelPmml\": \"<新的PMML_data>\",\n    \"sampleData\": \"<新的Sample_data>\"\n}\n",
+          "raw": "{\n    \"modelId\": \"mod006\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"新的模型\",\n    \"modelCategory\": \"新的分类\",\n    \"algorithmName\": \"new_algorithm\",\n    \"algorithmParameters\": \"{\\\"param1\\\": 10, \\\"param2\\\": 20}\",\n    \"sampleDivision\": \"新的样本划分\",\n    \"trainingProgress\": \"30%\",\n    \"modelStatus\": \"待训练\",\n    \"triggerMechanism\": \"手工触发\",\n    \"lastTrainingTime\": \"\",\n    \"lastTrainingDuration\": \"\",\n    \"taskDescription\": \"新模型的训练任务\",\n    \"successCriteria\": \"{\\\"accuracy\\\": 0.95}\",\n    \"dataSet\": \"new_dataset\",\n    \"dataSetStartDate\": \"2023-11-23\",\n    \"dataSetEndDate\": \"2023-12-31\",\n    \"trainingDataPercentage\": 70.0,\n    \"testDataPercentage\": 30.0,\n    \"samplingMethod\": \"分层\",\n    \"performanceMetrics\": \"{\\\"F1\\\": 0.94}\",\n    \"updateFrequency\": \"每周\",\n    \"monitoringFrequency\": \"每周\",\n    \"optimizationGoal\": \"最小化误差\",\n    \"effectiveTime\": \"{\\\"start\\\": \\\"2023-11-23 00:00:00\\\", \\\"end\\\": \\\"2024-12-31 00:00:00\\\"}\",\n    \"monitoringScenario\": \"新的监控场景\",\n    \"modelPmml\": \"<新的PMML_data>\",\n    \"sampleData\": \"<新的Sample_data>\",\n    \"creator\": \"王五\",\n    \"creationTime\": \"2023-11-23 08:00:00\",\n    \"updater\": \"\",\n    \"updateTime\": \"\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -103,6 +103,78 @@
           }
         },
         "url": "http://localhost:8080/models/manage"
+      },
+      "response": []
+    },
+    {
+      "name": "findBy",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"modelId\": \"mod001\",\n    \"modelVersion\": \"1.0\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "http://localhost:8080/models/findBy"
+      },
+      "response": []
+    },
+    {
+      "name": "update",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"modelId\": \"mod001\",\n    \"modelVersion\": \"1.0\",\n    // \"modelVersion\": \"3.0\",\n    \"algorithmName\": \"k-means\",\n    \"algorithmParameters\": \"{\\\"clusters\\\": 666, \\\"iterations\\\": 666}\",\n    \"taskDescription\": \"更新算法参数\",\n    \"updater\": \"李四\",\n    \"updateTime\": \"2023-11-22 15:00:00\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "http://localhost:8080/models/update"
+      },
+      "response": []
+    },
+    {
+      "name": "insert",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"modelId\": \"mod006\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"新的模型\",\n    \"modelCategory\": \"新的分类\",\n    \"algorithmName\": \"new_algorithm\",\n    \"algorithmParameters\": \"{\\\"param1\\\": 10, \\\"param2\\\": 20}\",\n    \"sampleDivision\": \"新的样本划分\",\n    \"trainingProgress\": \"30%\",\n    \"modelStatus\": \"待训练\",\n    \"triggerMechanism\": \"手工触发\",\n    \"lastTrainingTime\": \"\",\n    \"lastTrainingDuration\": \"\",\n    \"taskDescription\": \"新模型的训练任务\",\n    \"successCriteria\": \"{\\\"accuracy\\\": 0.95}\",\n    \"dataSet\": \"new_dataset\",\n    \"dataSetStartDate\": \"2023-11-23\",\n    \"dataSetEndDate\": \"2023-12-31\",\n    \"trainingDataPercentage\": 70.0,\n    \"testDataPercentage\": 30.0,\n    \"samplingMethod\": \"分层\",\n    \"performanceMetrics\": \"{\\\"F1\\\": 0.94}\",\n    \"updateFrequency\": \"每周\",\n    \"monitoringFrequency\": \"每周\",\n    \"optimizationGoal\": \"最小化误差\",\n    \"effectiveTime\": \"{\\\"start\\\": \\\"2023-11-23 00:00:00\\\", \\\"end\\\": \\\"2024-12-31 00:00:00\\\"}\",\n    \"monitoringScenario\": \"新的监控场景\",\n    \"modelPmml\": \"<新的PMML_data>\",\n    \"sampleData\": \"<新的Sample_data>\",\n    \"creator\": \"王五\",\n    \"creationTime\": \"2023-11-23 08:00:00\",\n    \"updater\": \"\",\n    \"updateTime\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "http://localhost:8080/models/insert"
+      },
+      "response": []
+    },
+    {
+      "name": "getAlgorithmParam",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"algorithmName\": \"k-means\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "http://localhost:8080/models/getAlgorithmParam"
       },
       "response": []
     }

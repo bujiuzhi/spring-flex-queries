@@ -3,6 +3,7 @@ package com.bujiuzhi.springflexqueries.service.impl;
 import com.bujiuzhi.springflexqueries.mapper.ModelMapper;
 import com.bujiuzhi.springflexqueries.pojo.Result;
 import com.bujiuzhi.springflexqueries.pojo.SearchRequest;
+import com.bujiuzhi.springflexqueries.pojo.StgAlgorithmParam;
 import com.bujiuzhi.springflexqueries.pojo.StgModelJob;
 import com.bujiuzhi.springflexqueries.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +50,13 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public Result manage(StgModelJob stgModelJob) {
-//        //先对modelId和modelVersion进行非空判断
+        //先对modelId和modelVersion进行非空判断
 //        if (stgModelJob.getModelId() == null || stgModelJob.getModelVersion() == null) {
 //            return Result.error("模型ID和模型版本不能为空");
 //        }
 
         // 检查数据库中是否存在匹配的模型作业
-        StgModelJob existingJob = modelMapper.findByModelIdAndVersion(stgModelJob.getModelId(), stgModelJob.getModelVersion());
+        StgModelJob existingJob = modelMapper.findBy(stgModelJob.getModelId(), stgModelJob.getModelVersion());
         if (existingJob != null) {
             // 如果存在，进行更新操作
             int updateCount = modelMapper.update(stgModelJob, "test.stg_model_job");
@@ -73,6 +74,103 @@ public class ModelServiceImpl implements ModelService {
                 return Result.error("模型作业添加失败");
             }
         }
+    }
+
+    /**
+     * 根据模型ID和版本查询模型作业详情。
+     *
+     * @param stgModelJob 模型作业对象
+     * @return 封装操作结果的对象，包含模型作业详情或错误信息
+     */
+    @Override
+    public Result findBy(StgModelJob stgModelJob) {
+        //先对modelId和modelVersion进行非空判断
+//        if (stgModelJob.getModelId() == null || stgModelJob.getModelVersion() == null) {
+//            return Result.error("模型ID和模型版本不能为空");
+//        }
+
+        // 查询模型作业
+        StgModelJob job = modelMapper.findBy(stgModelJob.getModelId(), stgModelJob.getModelVersion());
+        if (job != null) {
+            // 查询成功，返回模型作业详情
+            return Result.success(job);
+        } else {
+            // 查询失败，返回错误信息
+            return Result.error("未找到对应的模型作业");
+        }
+    }
+
+    /**
+     * 更新模型作业信息。
+     *
+     * @param stgModelJob 包含更新信息的模型作业对象
+     * @return 封装操作结果的对象，包含成功或错误信息
+     */
+    @Override
+    public Result update(StgModelJob stgModelJob) {
+        //先对modelId和modelVersion进行非空判断
+//        if (stgModelJob.getModelId() == null || stgModelJob.getModelVersion() == null) {
+//            return Result.error("模型ID和模型版本不能为空");
+//        }
+
+        // 检查是否存在匹配的模型ID和版本
+        StgModelJob existingJob = modelMapper.findBy(stgModelJob.getModelId(), stgModelJob.getModelVersion());
+        if (existingJob == null) {
+            // 如果不存在匹配的记录，返回错误信息
+            return Result.error("没有找到匹配的模型ID和版本");
+        }
+
+        // 存在匹配的记录，执行更新操作
+        int updateCount = modelMapper.update(stgModelJob, "test.stg_model_job");
+        if (updateCount > 0) {
+            // 更新成功
+            return Result.success("模型作业更新成功");
+        } else {
+            // 更新失败
+            return Result.error("模型作业更新失败");
+        }
+    }
+
+    /**
+     * 新增模型作业记录。
+     *
+     * @param stgModelJob 包含新增信息的模型作业对象
+     * @return 封装操作结果的对象，包含成功或错误信息
+     */
+    @Override
+    public Result insert(StgModelJob stgModelJob) {
+        //先对modelId和modelVersion进行非空判断
+//        if (stgModelJob.getModelId() == null || stgModelJob.getModelVersion() == null) {
+//            return Result.error("模型ID和模型版本不能为空");
+//        }
+
+        // 检查数据库中是否已存在具有相同模型ID和模型版本的记录
+        StgModelJob existingJob = modelMapper.findBy(stgModelJob.getModelId(), stgModelJob.getModelVersion());
+        if (existingJob != null) {
+            // 如果存在重复记录，返回错误信息
+            return Result.error("模型作业已存在，无法添加重复的模型ID和版本");
+        }
+
+        // 不存在重复记录，执行插入操作
+        int insertCount = modelMapper.insert(stgModelJob, "test.stg_model_job");
+        if (insertCount > 0) {
+            // 插入成功
+            return Result.success("模型作业添加成功");
+        } else {
+            // 插入失败，可能是数据违反了约束或其他数据库操作问题
+            return Result.error("模型作业添加失败");
+        }
+    }
+
+    /**
+     * 根据模型算法名称获取配置信息。
+     *
+     * @param stgAlgorithmParam 模型算法实体类
+     * @return 模型算法配置信息
+     */
+    @Override
+    public StgAlgorithmParam getAlgorithmParam(StgAlgorithmParam stgAlgorithmParam) {
+        return modelMapper.getAlgorithmParam(stgAlgorithmParam.getAlgorithmName());
     }
 
 }

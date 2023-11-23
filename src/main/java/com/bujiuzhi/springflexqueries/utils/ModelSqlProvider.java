@@ -105,6 +105,7 @@ public class ModelSqlProvider {
         sql.WHERE("model_id = " + "'" + stgModelJob.getModelId() + "'");
         sql.WHERE("model_version = " + "'" + stgModelJob.getModelVersion() + "'");
 
+        System.out.println(sql.toString());
         return sql.toString();
     }
 
@@ -134,6 +135,7 @@ public class ModelSqlProvider {
             }
         }
 
+        System.out.println(sql.toString());
         return sql.toString();
     }
 

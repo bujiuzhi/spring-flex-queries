@@ -22,7 +22,7 @@ public class StgModelJob {
 
     private String modelCategory; // 模型分类，例如信用模型、归因模型、估值模型、预警模型
 
-    private String modelAlgorithm; // 模型算法，例如k-means, clarans, cure, dbscan
+    private String algorithmName; // 模型算法，例如k-means, clarans, cure, dbscan
 
     private String algorithmParameters; // 算法的参数，通常以JSON格式存储
 
@@ -33,16 +33,6 @@ public class StgModelJob {
     private String modelStatus; // 模型状态，例如训练中、训练完成
 
     private String triggerMechanism; // 触发机制（更新策略），例如指标预警、手工触发、定期触发
-
-    private String creator; // 创建者
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime creationTime; // 创建时间
-
-    private String updater; // 更新者
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime; // 更新时间
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastTrainingTime; // 最近一次训练的时间
@@ -82,5 +72,15 @@ public class StgModelJob {
     private String modelPmml; // 模型PMML
 
     private String sampleData; // 样本数据列
+
+    private String creator; // 创建者
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime creationTime; // 创建时间
+
+    private String updater; // 更新者
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateTime; // 更新时间
 
 }

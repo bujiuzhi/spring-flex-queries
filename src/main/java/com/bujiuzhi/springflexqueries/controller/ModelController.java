@@ -2,6 +2,7 @@ package com.bujiuzhi.springflexqueries.controller;
 
 import com.bujiuzhi.springflexqueries.pojo.Result;
 import com.bujiuzhi.springflexqueries.pojo.SearchRequest;
+import com.bujiuzhi.springflexqueries.pojo.StgAlgorithmParam;
 import com.bujiuzhi.springflexqueries.pojo.StgModelJob;
 import com.bujiuzhi.springflexqueries.service.ModelService;
 import jakarta.validation.Valid;
@@ -41,6 +42,55 @@ public class ModelController {
     @PostMapping("/manage")
     public Result manage(@Valid @RequestBody StgModelJob stgModelJob) {
         return modelService.manage(stgModelJob);
+    }
+
+
+    /**
+     * 通过POST请求根据模型ID和版本获取模型作业详情。
+     *
+     * @param stgModelJob 模型作业对象
+     * @return 返回操作结果封装对象，包含模型作业详情或错误信息
+     */
+    @PostMapping("/findBy")
+    public Result findBy(@Valid @RequestBody StgModelJob stgModelJob) {
+        return modelService.findBy(stgModelJob);
+    }
+
+    /**
+     * 通过POST请求更新指定的模型作业信息。
+     *
+     * @param stgModelJob 模型作业对象，包含更新信息
+     * @return 返回操作结果封装对象，包含成功或错误信息
+     */
+    @PostMapping("/update")
+    public Result update(@Valid @RequestBody StgModelJob stgModelJob) {
+        return modelService.update(stgModelJob);
+    }
+
+    /**
+     * 通过POST请求新增一个模型作业记录。
+     *
+     * @param stgModelJob 模型作业对象，包含所需新增信息
+     * @return 返回操作结果封装对象，包含成功或错误信息
+     */
+    @PostMapping("/insert")
+    public Result insert(@Valid @RequestBody StgModelJob stgModelJob) {
+        return modelService.insert(stgModelJob);
+    }
+
+    /**
+     * 根据模型算法名称获取配置信息。
+     *
+     * @param stgAlgorithmParam 模型算法实体类
+     * @return 返回操作结果封装对象，包含模型算法配置信息或错误信息
+     */
+    @PostMapping("/getAlgorithmParam")
+    public Result getAlgorithmParam(@Valid @RequestBody StgAlgorithmParam stgAlgorithmParam) {
+        StgAlgorithmParam algorithm = modelService.getAlgorithmParam(stgAlgorithmParam);
+        if (algorithm != null) {
+            return Result.success(algorithm);
+        }
+        return Result.error("未查询到对应的模型算法配置信息");
     }
 
 }
