@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping("/models")
 @Validated
@@ -86,11 +87,17 @@ public class ModelController {
      */
     @PostMapping("/getAlgorithmParam")
     public Result getAlgorithmParam(@Valid @RequestBody StgAlgorithmParam stgAlgorithmParam) {
-        StgAlgorithmParam algorithm = modelService.getAlgorithmParam(stgAlgorithmParam);
-        if (algorithm != null) {
-            return Result.success(algorithm);
-        }
-        return Result.error("未查询到对应的模型算法配置信息");
+        return modelService.getAlgorithmParam(stgAlgorithmParam);
+    }
+
+    /**
+     * 获取所有算法名称。
+     *
+     * @return 操作结果，包含算法名称列表或错误信息
+     */
+    @PostMapping("/getAllAlgorithmNames")
+    public Result getAllAlgorithmNames() {
+        return modelService.getAllAlgorithmNames();
     }
 
 }

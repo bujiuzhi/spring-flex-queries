@@ -49,12 +49,19 @@ public interface ModelService {
     Result insert(StgModelJob stgModelJob);
 
     /**
-     * 根据模型算法名称获取配置信息。
+     * 根据模型算法名称获取配置信息，并封装在Result对象中。
      *
      * @param stgAlgorithmParam 模型算法实体类
-     * @return 模型算法配置信息
+     * @return 封装了操作结果的Result对象
      */
-    StgAlgorithmParam getAlgorithmParam(StgAlgorithmParam stgAlgorithmParam);
+    Result getAlgorithmParam(StgAlgorithmParam stgAlgorithmParam);
+
+    /**
+     * 获取所有算法名称，并封装在Result对象中。
+     *
+     * @return 封装了操作结果的Result对象
+     */
+    Result getAllAlgorithmNames();
 }
 
 

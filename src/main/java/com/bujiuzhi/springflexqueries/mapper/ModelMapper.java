@@ -60,4 +60,12 @@ public interface ModelMapper {
     @Select("SELECT * FROM test.stg_algorithm_param WHERE algorithm_name = #{algorithmName}")
     StgAlgorithmParam getAlgorithmParam(String algorithmName);
 
+    /**
+     * 查询所有算法名称。
+     *
+     * @return 算法名称列表
+     */
+    @Select("SELECT algorithm_name FROM test.stg_algorithm_param")
+    List<String> getAllAlgorithmNames();
+
 }

@@ -166,11 +166,29 @@ public class ModelServiceImpl implements ModelService {
      * 根据模型算法名称获取配置信息。
      *
      * @param stgAlgorithmParam 模型算法实体类
-     * @return 模型算法配置信息
+     * @return 封装了操作结果的Result对象
      */
     @Override
-    public StgAlgorithmParam getAlgorithmParam(StgAlgorithmParam stgAlgorithmParam) {
-        return modelMapper.getAlgorithmParam(stgAlgorithmParam.getAlgorithmName());
+    public Result getAlgorithmParam(StgAlgorithmParam stgAlgorithmParam) {
+        StgAlgorithmParam algorithm = modelMapper.getAlgorithmParam(stgAlgorithmParam.getAlgorithmName());
+        if (algorithm != null) {
+            return Result.success(algorithm);
+        }
+        return Result.error("未查询到对应的模型算法配置信息");
+    }
+
+    /**
+     * 获取所有算法名称，并封装在Result对象中。
+     *
+     * @return 封装了操作结果的Result对象
+     */
+    @Override
+    public Result getAllAlgorithmNames() {
+        List<String> names = modelMapper.getAllAlgorithmNames();
+        if (names == null || names.isEmpty()) {
+            return Result.error("没有找到算法名称");
+        }
+        return Result.success(names);
     }
 
 }
