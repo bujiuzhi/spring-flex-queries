@@ -61,9 +61,22 @@ public class ModelSqlProvider {
         }
 
         // 添加分页逻辑
+//        if (searchRequest.getPageNumber() != null && searchRequest.getPageSize() != null) {
+//            int offset = (searchRequest.getPageNumber() - 1) * searchRequest.getPageSize();
+//            sql.LIMIT(searchRequest.getPageSize()).OFFSET(offset);
+//        }
+
+        // 添加传统的分页逻辑
+        // 检查分页参数是否存在
         if (searchRequest.getPageNumber() != null && searchRequest.getPageSize() != null) {
+            // 计算分页的偏移量
             int offset = (searchRequest.getPageNumber() - 1) * searchRequest.getPageSize();
-            sql.LIMIT(searchRequest.getPageSize()).OFFSET(offset);
+
+            // 将 LIMIT 和 OFFSET 直接作为字符串拼接到查询中
+            String limitOffsetClause = " LIMIT " + searchRequest.getPageSize() + " OFFSET " + offset;
+
+            // 返回最终构建的 SQL 语句
+            return sql.toString() + limitOffsetClause;
         }
 
         System.out.println(sql.toString());
