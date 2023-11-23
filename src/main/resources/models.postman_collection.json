@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "2ea77a9a-3714-48c5-bc48-ccbf3f10ca51",
     "name": "models",
-    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "31082839"
   },
   "item": [
@@ -48,13 +48,13 @@
       "response": []
     },
     {
-      "name": "manage-update",
+      "name": "findBy",
       "request": {
         "method": "POST",
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"modelId\": \"mod001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"更新后的信用评分模型\",\n    \"modelCategory\": \"信用模型\",\n    \"algorithmName\": \"updated_k-means\",\n    \"algorithmParameters\": \"{\\\"clusters\\\": 6, \\\"iterations\\\": 150}\",\n    \"sampleDivision\": \"训练数据\",\n    \"trainingProgress\": \"50%\",\n    \"modelStatus\": \"训练中\",\n    \"triggerMechanism\": \"指标预警\",\n    \"lastTrainingTime\": \"2023-11-22 14:00:00\",\n    \"lastTrainingDuration\": \"2小时\",\n    \"taskDescription\": \"信用评分模型的更新训练\",\n    \"successCriteria\": \"{\\\"accuracy\\\": 0.93}\",\n    \"dataSet\": \"credit_score_training_v2\",\n    \"dataSetStartDate\": \"2023-01-01\",\n    \"dataSetEndDate\": \"2023-06-01\",\n    \"trainingDataPercentage\": 60.0,\n    \"testDataPercentage\": 40.0,\n    \"samplingMethod\": \"随机\",\n    \"performanceMetrics\": \"{\\\"AUC\\\": 0.91}\",\n    \"updateFrequency\": \"每天\",\n    \"monitoringFrequency\": \"每天\",\n    \"optimizationGoal\": \"最大化AUC值\",\n    \"effectiveTime\": \"{\\\"start\\\": \\\"2023-11-22 00:00:00\\\", \\\"end\\\": \\\"2024-11-22 00:00:00\\\"}\",\n    \"monitoringScenario\": \"信用风险\",\n    \"modelPmml\": \"<PMML_data>\",\n    \"sampleData\": \"<Sample_data>\",\n    \"creator\": \"张三\",\n    \"creationTime\": \"2023-01-01 01:00:00\",\n    \"updater\": \"李四\",\n    \"updateTime\": \"2023-11-22 15:00:00\"\n}",
+          "raw": "",
           "options": {
             "raw": {
               "language": "json"
@@ -62,7 +62,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/models/manage",
+          "raw": "http://localhost:8080/models/findBy?jobId=20230101080000_mod001_2.0",
           "protocol": "http",
           "host": [
             "localhost"
@@ -70,75 +70,15 @@
           "port": "8080",
           "path": [
             "models",
-            "manage"
+            "findBy"
           ],
           "query": [
             {
-              "key": "model_id",
-              "value": "1",
-              "disabled": true
-            },
-            {
-              "key": "model_name",
-              "value": "模型1",
-              "disabled": true
+              "key": "jobId",
+              "value": "20230101080000_mod001_2.0"
             }
           ]
         }
-      },
-      "response": []
-    },
-    {
-      "name": "manage-insert",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"modelId\": \"mod006\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"新的模型\",\n    \"modelCategory\": \"新的分类\",\n    \"algorithmName\": \"new_algorithm\",\n    \"algorithmParameters\": \"{\\\"param1\\\": 10, \\\"param2\\\": 20}\",\n    \"sampleDivision\": \"新的样本划分\",\n    \"trainingProgress\": \"30%\",\n    \"modelStatus\": \"待训练\",\n    \"triggerMechanism\": \"手工触发\",\n    \"lastTrainingTime\": \"\",\n    \"lastTrainingDuration\": \"\",\n    \"taskDescription\": \"新模型的训练任务\",\n    \"successCriteria\": \"{\\\"accuracy\\\": 0.95}\",\n    \"dataSet\": \"new_dataset\",\n    \"dataSetStartDate\": \"2023-11-23\",\n    \"dataSetEndDate\": \"2023-12-31\",\n    \"trainingDataPercentage\": 70.0,\n    \"testDataPercentage\": 30.0,\n    \"samplingMethod\": \"分层\",\n    \"performanceMetrics\": \"{\\\"F1\\\": 0.94}\",\n    \"updateFrequency\": \"每周\",\n    \"monitoringFrequency\": \"每周\",\n    \"optimizationGoal\": \"最小化误差\",\n    \"effectiveTime\": \"{\\\"start\\\": \\\"2023-11-23 00:00:00\\\", \\\"end\\\": \\\"2024-12-31 00:00:00\\\"}\",\n    \"monitoringScenario\": \"新的监控场景\",\n    \"modelPmml\": \"<新的PMML_data>\",\n    \"sampleData\": \"<新的Sample_data>\",\n    \"creator\": \"王五\",\n    \"creationTime\": \"2023-11-23 08:00:00\",\n    \"updater\": \"\",\n    \"updateTime\": \"\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": "http://localhost:8080/models/manage"
-      },
-      "response": []
-    },
-    {
-      "name": "findBy",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"modelId\": \"mod001\",\n    \"modelVersion\": \"1.0\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": "http://localhost:8080/models/findBy"
-      },
-      "response": []
-    },
-    {
-      "name": "update",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"modelId\": \"mod001\",\n    \"modelVersion\": \"1.0\",\n    // \"modelVersion\": \"3.0\",\n    \"algorithmName\": \"k-means\",\n    \"algorithmParameters\": \"{\\\"clusters\\\": 666, \\\"iterations\\\": 666}\",\n    \"taskDescription\": \"更新算法参数\",\n    \"updater\": \"李四\",\n    \"updateTime\": \"2023-11-22 15:00:00\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": "http://localhost:8080/models/update"
       },
       "response": []
     },
@@ -156,7 +96,67 @@
             }
           }
         },
-        "url": "http://localhost:8080/models/insert"
+        "url": {
+          "raw": "http://localhost:8080/models/insert",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "insert"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"jobId\":\"20230101010000_mod001_1.0\",\n    \"modelId\": \"mod002\",\n    // \"modelVersion\": \"5.0\",\n    \"algorithmName\": \"k-means\",\n    \"algorithmParameters\": \"{\\\"clusters\\\": 666, \\\"iterations\\\": 666}\",\n    \"taskDescription\": \"更新算法参数\",\n    \"updater\": \"李四\",\n    \"updateTime\": \"2023-11-22 15:00:00\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/models/update",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "update"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getAllAlgorithmNames",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/models/getAllAlgorithmNames",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "getAllAlgorithmNames"
+          ]
+        }
       },
       "response": []
     },
@@ -174,7 +174,158 @@
             }
           }
         },
-        "url": "http://localhost:8080/models/getAlgorithmParam"
+        "url": {
+          "raw": "http://localhost:8080/models/getAlgorithmParam",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "getAlgorithmParam"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "triggerJob",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"modelId\": \"model_001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"Sample Model\"\n    // ...其他 StgModelJob 字段...\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/models/triggerJob?jobId=20230101080000_mod001_2.0",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "triggerJob"
+          ],
+          "query": [
+            {
+              "key": "jobId",
+              "value": "20230101080000_mod001_2.0"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "queryJobStatus",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"modelId\": \"model_001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"Sample Model\"\n    // ...其他 StgModelJob 字段...\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/models/queryJobStatus?jobId=20230101010000_mod001_1.0",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "queryJobStatus"
+          ],
+          "query": [
+            {
+              "key": "jobId",
+              "value": "20230101010000_mod001_1.0"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "downloadJobJournal",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"modelId\": \"model_001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"Sample Model\"\n    // ...其他 StgModelJob 字段...\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/models/downloadJobJournal?jobId=20230101080000_mod001_2.0",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "downloadJobJournal"
+          ],
+          "query": [
+            {
+              "key": "jobId",
+              "value": "20230101080000_mod001_2.0"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "stopJob",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"modelId\": \"model_001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"Sample Model\"\n    // ...其他 StgModelJob 字段...\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/models/stopJob?jobId=20230101080000_mod001_2.0",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "stopJob"
+          ],
+          "query": [
+            {
+              "key": "jobId",
+              "value": "20230101080000_mod001_2.0"
+            }
+          ]
+        }
       },
       "response": []
     }

@@ -102,8 +102,7 @@ public class ModelSqlProvider {
             }
         }
         // 设置WHERE条件，通常基于主键或唯一约束进行匹配。
-        sql.WHERE("model_id = " + "'" + stgModelJob.getModelId() + "'");
-        sql.WHERE("model_version = " + "'" + stgModelJob.getModelVersion() + "'");
+        sql.WHERE("job_id = " + "'" + stgModelJob.getJobId() + "'");
 
         System.out.println(sql.toString());
         return sql.toString();

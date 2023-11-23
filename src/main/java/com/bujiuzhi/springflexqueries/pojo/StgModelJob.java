@@ -12,11 +12,14 @@ import java.time.LocalDateTime;
  */
 @Data
 public class StgModelJob {
-    @NotBlank(message = "模型ID不能为空")
-    private String modelId; // 模型ID
+    @NotBlank(message = "作业ID不能为空", groups = Update.class)
+    private String jobId; // 模型作业ID，在更新操作时不能为空
 
-    @NotBlank(message = "模型版本不能为空")
-    private String modelVersion; // 模型版本
+    @NotBlank(message = "模型ID不能为空", groups = Insert.class)
+    private String modelId; // 模型ID，在插入操作时不能为空
+
+    @NotBlank(message = "模型版本不能为空", groups = Insert.class)
+    private String modelVersion; // 模型版本，在插入操作时不能为空
 
     private String modelName; // 模型的名称
 
@@ -82,5 +85,17 @@ public class StgModelJob {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime; // 更新时间
+
+
+    //public interface Insert extends Default {}
+    public interface Insert {
+    }
+
+    //如果说某个校验项没有指定分组,默认属于Default分组
+    //分组之间可以继承, A extends B  那么A中拥有B中所有的校验项
+
+    //public interface Update extends Default {}
+    public interface Update {
+    }
 
 }

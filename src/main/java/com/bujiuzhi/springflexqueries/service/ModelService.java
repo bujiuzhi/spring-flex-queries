@@ -16,29 +16,12 @@ public interface ModelService {
     Result search(SearchRequest searchRequest);
 
     /**
-     * 管理模型作业的设置，实现新增或更新逻辑。
+     * 通过作业ID查询模型作业详情。
      *
-     * @param stgModelJob 模型作业对象
-     * @return 返回操作结果，封装在Result对象中。
+     * @param jobId 作业ID
+     * @return 操作结果封装对象，包含模型作业详情或错误信息
      */
-    Result manage(StgModelJob stgModelJob);
-
-
-    /**
-     * 根据模型ID和版本查询模型作业详情。
-     *
-     * @param stgModelJob 模型作业对象
-     * @return 封装操作结果的对象，包含模型作业详情或错误信息
-     */
-    Result findBy(StgModelJob stgModelJob);
-
-    /**
-     * 更新模型作业信息。
-     *
-     * @param stgModelJob 包含更新信息的模型作业对象
-     * @return 封装操作结果的对象，包含成功或错误信息
-     */
-    Result update(StgModelJob stgModelJob);
+    Result findBy(String jobId);
 
     /**
      * 新增模型作业记录。
@@ -49,6 +32,21 @@ public interface ModelService {
     Result insert(StgModelJob stgModelJob);
 
     /**
+     * 更新模型作业信息。
+     *
+     * @param stgModelJob 包含更新信息的模型作业对象
+     * @return 封装操作结果的对象，包含成功或错误信息
+     */
+    Result update(StgModelJob stgModelJob);
+
+    /**
+     * 获取所有算法名称，并封装在Result对象中。
+     *
+     * @return 封装了操作结果的Result对象
+     */
+    Result getAllAlgorithmNames();
+
+    /**
      * 根据模型算法名称获取配置信息，并封装在Result对象中。
      *
      * @param stgAlgorithmParam 模型算法实体类
@@ -57,11 +55,42 @@ public interface ModelService {
     Result getAlgorithmParam(StgAlgorithmParam stgAlgorithmParam);
 
     /**
-     * 获取所有算法名称，并封装在Result对象中。
+     * 触发模型作业。
      *
-     * @return 封装了操作结果的Result对象
+     * @param jobId       事务ID
+     * @param stgModelJob 模型作业实体
+     * @return 操作结果
      */
-    Result getAllAlgorithmNames();
+    Result triggerJob(String jobId, StgModelJob stgModelJob);
+
+    /**
+     * 查询模型作业状态。
+     *
+     * @param jobId       事务ID
+     * @param stgModelJob 模型作业实体
+     * @return 状态信息
+     */
+    Result queryJobStatus(String jobId, StgModelJob stgModelJob);
+
+    /**
+     * 下载模型作业日志。
+     *
+     * @param jobId       事务ID
+     * @param stgModelJob 模型作业实体
+     * @return 日志信息
+     */
+    Result downloadJobJournal(String jobId, StgModelJob stgModelJob);
+
+    /**
+     * 停止模型作业。
+     *
+     * @param jobId       事务ID
+     * @param stgModelJob 模型作业实体
+     * @return 操作结果
+     */
+    Result stopJob(String jobId, StgModelJob stgModelJob);
+
+
 }
 
 

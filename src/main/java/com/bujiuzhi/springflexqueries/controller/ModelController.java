@@ -8,10 +8,7 @@ import com.bujiuzhi.springflexqueries.service.ModelService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -35,48 +32,46 @@ public class ModelController {
     }
 
     /**
-     * 管理模型作业的设置，包括添加或更新记录。
+     * 根据作业ID获取模型作业的详情。
      *
-     * @param stgModelJob 客户端发送的模型作业对象
-     * @return 返回操作结果，封装在Result对象中。
-     */
-    @PostMapping("/manage")
-    public Result manage(@Valid @RequestBody StgModelJob stgModelJob) {
-        return modelService.manage(stgModelJob);
-    }
-
-
-    /**
-     * 通过POST请求根据模型ID和版本获取模型作业详情。
-     *
-     * @param stgModelJob 模型作业对象
+     * @param jobId 作业ID
      * @return 返回操作结果封装对象，包含模型作业详情或错误信息
      */
     @PostMapping("/findBy")
-    public Result findBy(@Valid @RequestBody StgModelJob stgModelJob) {
-        return modelService.findBy(stgModelJob);
+    public Result findBy(@RequestParam String jobId) {
+        return modelService.findBy(jobId);
     }
 
     /**
-     * 通过POST请求更新指定的模型作业信息。
-     *
-     * @param stgModelJob 模型作业对象，包含更新信息
-     * @return 返回操作结果封装对象，包含成功或错误信息
-     */
-    @PostMapping("/update")
-    public Result update(@Valid @RequestBody StgModelJob stgModelJob) {
-        return modelService.update(stgModelJob);
-    }
-
-    /**
-     * 通过POST请求新增一个模型作业记录。
+     * 新增一个模型作业记录。
      *
      * @param stgModelJob 模型作业对象，包含所需新增信息
      * @return 返回操作结果封装对象，包含成功或错误信息
      */
     @PostMapping("/insert")
-    public Result insert(@Valid @RequestBody StgModelJob stgModelJob) {
+    public Result insert(@Validated(StgModelJob.Insert.class) @RequestBody StgModelJob stgModelJob) {
         return modelService.insert(stgModelJob);
+    }
+
+    /**
+     * 更新指定的模型作业信息。
+     *
+     * @param stgModelJob 模型作业对象，包含更新信息
+     * @return 返回操作结果封装对象，包含成功或错误信息
+     */
+    @PostMapping("/update")
+    public Result update(@Validated(StgModelJob.Update.class) @RequestBody StgModelJob stgModelJob) {
+        return modelService.update(stgModelJob);
+    }
+
+    /**
+     * 获取所有算法名称。
+     *
+     * @return 操作结果，包含算法名称列表或错误信息
+     */
+    @PostMapping("/getAllAlgorithmNames")
+    public Result getAllAlgorithmNames() {
+        return modelService.getAllAlgorithmNames();
     }
 
     /**
@@ -91,13 +86,55 @@ public class ModelController {
     }
 
     /**
-     * 获取所有算法名称。
+     * 触发模型作业。
+     * 根据传入的事务ID和模型作业实体，执行作业触发操作，并返回操作结果。
      *
-     * @return 操作结果，包含算法名称列表或错误信息
+     * @param jobId       事务ID
+     * @param stgModelJob 模型作业实体
+     * @return Result     操作结果，包含成功或失败的消息
      */
-    @PostMapping("/getAllAlgorithmNames")
-    public Result getAllAlgorithmNames() {
-        return modelService.getAllAlgorithmNames();
+    @PostMapping("/triggerJob")
+    public Result triggerJob(@RequestParam String jobId, @RequestBody StgModelJob stgModelJob) {
+        return modelService.triggerJob(jobId, stgModelJob);
+    }
+
+    /**
+     * 查询模型作业状态。
+     * 根据传入的事务ID和模型作业实体，查询作业的当前状态，并返回状态信息。
+     *
+     * @param jobId       事务ID
+     * @param stgModelJob 模型作业实体
+     * @return Result     操作结果，包含作业状态信息或失败的消息
+     */
+    @PostMapping("/queryJobStatus")
+    public Result queryJobStatus(@RequestParam String jobId, @RequestBody StgModelJob stgModelJob) {
+        return modelService.queryJobStatus(jobId, stgModelJob);
+    }
+
+    /**
+     * 下载模型作业日志。
+     * 根据传入的事务ID和模型作业实体，执行日志下载操作，并返回操作结果。
+     *
+     * @param jobId       事务ID
+     * @param stgModelJob 模型作业实体
+     * @return Result     操作结果，包含下载日志的消息或失败的消息
+     */
+    @PostMapping("/downloadJobJournal")
+    public Result downloadJobJournal(@RequestParam String jobId, @RequestBody StgModelJob stgModelJob) {
+        return modelService.downloadJobJournal(jobId, stgModelJob);
+    }
+
+    /**
+     * 停止模型作业。
+     * 根据传入的事务ID和模型作业实体，执行作业停止操作，并返回操作结果。
+     *
+     * @param jobId       事务ID
+     * @param stgModelJob 模型作业实体
+     * @return Result     操作结果，包含停止作业的消息或失败的消息
+     */
+    @PostMapping("/stopJob")
+    public Result stopJob(@RequestParam String jobId, @RequestBody StgModelJob stgModelJob) {
+        return modelService.stopJob(jobId, stgModelJob);
     }
 
 }

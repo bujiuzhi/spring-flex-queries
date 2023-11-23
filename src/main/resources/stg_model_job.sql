@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS stg_model_job;
 -- 创建表
 CREATE TABLE stg_model_job
 (
+    job_id                   VARCHAR(255) NOT NULL COMMENT '任务ID，唯一标识每条记录',
     model_id                 VARCHAR(255) NOT NULL COMMENT '唯一标识模型的ID',
     model_version            VARCHAR(255) NOT NULL COMMENT '模型版本',
     model_name               VARCHAR(255) COMMENT '模型的名称',
@@ -36,12 +37,11 @@ CREATE TABLE stg_model_job
     creation_time            DATETIME COMMENT '创建时间',
     updater                  VARCHAR(255) COMMENT '更新者',
     update_time              DATETIME COMMENT '更新时间',
-    PRIMARY KEY (model_id, model_version)
+    PRIMARY KEY (job_id)
 ) COMMENT ='存储模型作业信息的表';
 
 -- 插入数据
--- 插入数据
-INSERT INTO test.stg_model_job (model_id, model_version, model_name, model_category, algorithm_name,
+INSERT INTO test.stg_model_job (job_id, model_id, model_version, model_name, model_category, algorithm_name,
                                 algorithm_parameters, sample_division, training_progress, model_status,
                                 trigger_mechanism, last_training_time, last_training_duration, task_description,
                                 success_criteria, data_set, data_set_start_date, data_set_end_date,
@@ -49,39 +49,39 @@ INSERT INTO test.stg_model_job (model_id, model_version, model_name, model_categ
                                 performance_metrics, update_frequency, monitoring_frequency,
                                 optimization_goal, effective_time, monitoring_scenario, model_pmml, sample_data,
                                 creator, creation_time, updater, update_time)
-VALUES ('mod001', '1.0', '信用评分模型', '信用模型', 'k-means',
+VALUES ('20230101010000_mod001_1.0', 'mod001', '1.0', '信用评分模型', '信用模型', 'k-means',
         '{"clusters": 5, "iterations": 100}', '训练数据', '100%', '训练完成',
         '指标预警', '2023-01-10 13:00:00', '4小时', '信用评分模型训练', '{"accuracy": 0.92}', 'credit_score_training',
         '2022-01-01', '2022-06-01', 70.0, 30.0, '随机', '{"AUC": 0.90}', '每天', '每天',
         '最大化AUC', '{"always": true}', '信用风险', '<PMML_data>', '<Sample_data>',
         '张三', '2023-01-01 01:00:00', '李四', '2023-01-10 14:00:00'),
-       ('mod001', '2.0', '信用评分模型', '信用模型', 'k-means',
+       ('20230101080000_mod001_2.0', 'mod001', '2.0', '信用评分模型', '信用模型', 'k-means',
         '{"clusters": 5, "iterations": 100}', '训练数据', '100%', '训练完成',
         '指标预警', '2023-01-10 13:00:00', '4小时', '信用评分模型训练', '{"accuracy": 0.92}', 'credit_score_training',
         '2022-01-01', '2022-06-01', 70.0, 30.0, '随机', '{"AUC": 0.90}', '每天', '每天',
         '最大化AUC值', '{"always": true}', '信用风险', '<PMML_data>', '<Sample_data>',
         '张三', '2023-01-01 08:00:00', '李四', '2023-01-10 14:00:00'),
-       ('mod002', '2.0', '客户流失预测', '预警模型', 'logistic_regression',
+       ('20230201093000_mod002_2.0', 'mod002', '2.0', '客户流失预测', '预警模型', 'logistic_regression',
         '{"C": 1.0, "max_iter": 200}', '测试数据', '90%', '训练中',
         '手工触发', '2023-02-15 15:30:00', '6小时', '客户流失率分析与预测', '{"f1_score": 0.88}', 'churn_analysis',
         '2022-02-01', '2022-07-01', 60.0, 40.0, '分层', '{"precision": 0.80}', '每周', '每周',
         '最小化误分类率', '{"start": "2023-02-01", "end": "2023-02-15"}', '客户关系管理', '<PMML_data>',
         '<Sample_data>',
         '王五', '2023-02-01 09:30:00', '赵六', '2023-02-15 16:30:00'),
-       ('mod003', '1.0', '商品推荐模型', '归因模型', 'neural_network',
+       ('20230301100000_mod003_1.0', 'mod003', '1.0', '商品推荐模型', '归因模型', 'neural_network',
         '{"layers": [64, 32, 16], "epochs": 10}', '验证数据', '75%', '训练中',
         '定期触发', '2023-03-20 16:00:00', '8小时', '个性化商品推荐模型训练', '{"recall": 0.93}',
         'product_recommendation',
         '2022-03-01', '2022-08-01', 50.0, 50.0, '系统', '{"NDCG": 0.85}', '每月', '每月',
         '最大化召回率', '{"start": "2023-03-01", "end": "2023-03-20"}', '销售优化', '<PMML_data>', '<Sample_data>',
         '孙七', '2023-03-01 10:00:00', '周八', '2023-03-20 17:00:00'),
-       ('mod004', '3.0', '故障预测模型', '预警模型', 'decision_tree',
+       ('20230401120000_mod004_3.0', 'mod004', '3.0', '故障预测模型', '预警模型', 'decision_tree',
         '{"depth": 10, "min_samples_split": 20}', '训练数据', '50%', '训练中',
         '指标预警', '2023-04-25 17:00:00', '5小时', '故障率预测', '{"precision": 0.87}', 'fault_prediction',
         '2022-04-01', '2022-09-01', 80.0, 20.0, '随机', '{"MSE": 0.03}', '每季度', '每季度',
         '最小化均方误差', '{"always": true}', '设备维护', '<PMML_data>', '<Sample_data>',
         '刘九', '2023-04-01 12:00:00', '吴十', '2023-04-25 18:00:00'),
-       ('mod005', '2.0', '市场细分模型', '归因模型', 'svm',
+       ('20230501130000_mod005_2.0', 'mod005', '2.0', '市场细分模型', '归因模型', 'svm',
         '{"kernel": "rbf", "C": 1.0}', '测试数据', '100%', '训练完成',
         '手工触发', '2023-05-30 18:00:00', '7小时', '市场细分与消费者行为分析', '{"accuracy": 0.89}',
         'market_segmentation',
