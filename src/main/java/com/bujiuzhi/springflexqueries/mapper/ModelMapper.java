@@ -55,7 +55,7 @@ public interface ModelMapper {
      *
      * @return 算法名称列表
      */
-    @Select("SELECT algorithm_name FROM test.stg_algorithm_param")
+    @Select("SELECT algorithm_name as algorithmName FROM test.stg_algorithm_param")
     List<String> getAllAlgorithmNames();
 
     /**
@@ -64,7 +64,7 @@ public interface ModelMapper {
      * @param algorithmName 模型算法名称
      * @return 对应的模型算法配置信息
      */
-    @Select("SELECT algorithm_parameters FROM test.stg_algorithm_param WHERE algorithm_name = #{algorithmName}")
+    @Select("SELECT algorithm_parameters as algorithmParameters FROM test.stg_algorithm_param WHERE algorithm_name = #{algorithmName}")
     StgAlgorithmParam getAlgorithmParam(String algorithmName);
 
 }
