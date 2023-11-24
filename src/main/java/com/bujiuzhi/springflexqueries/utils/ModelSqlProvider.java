@@ -5,6 +5,7 @@ import com.bujiuzhi.springflexqueries.pojo.StgModelJob;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,14 @@ public class ModelSqlProvider {
      * @return 构建的SQL查询语句
      */
     public String search(SearchRequest searchRequest, String tableName) {
-        SQL sql = new SQL().SELECT("*").FROM(tableName);
+        SQL sql = new SQL();
+
+        // 获取StgModelJob类的所有字段，创建SELECT语句
+//        sql.SELECT("*");
+        String fieldsWithAliases = generateSelectFieldsWithAliases(StgModelJob.class);
+        sql.SELECT(fieldsWithAliases);
+
+        sql.FROM(tableName);
 
         // 通过反射获取SearchRequest中的所有字段
         for (Field field : SearchRequest.class.getDeclaredFields()) {
@@ -81,6 +89,21 @@ public class ModelSqlProvider {
 
         System.out.println(sql.toString());
         // 返回构建完成的SQL语句
+        return sql.toString();
+    }
+
+    /**
+     * 动态生成查询模型作业的SQL语句。
+     * 使用反射生成带有别名的字段列表，确保数据库字段的下划线命名风格
+     * 能够正确映射到Java对象的驼峰命名属性上。
+     *
+     * @param jobId 作业ID，用于查询条件。
+     * @return 返回完整的SQL查询语句。
+     */
+    public String findBy(String jobId) {
+        SQL sql = new SQL();
+        String fieldsWithAliases = generateSelectFieldsWithAliases(StgModelJob.class);
+        sql.SELECT(fieldsWithAliases).FROM("test.stg_model_job").WHERE("job_id = #{jobId}");
         return sql.toString();
     }
 
@@ -157,9 +180,24 @@ public class ModelSqlProvider {
      * @param camelCase 驼峰命名的字符串
      * @return 下划线命名的字符串
      */
-    private String convertCamelCaseToUnderscore(String camelCase) {
+    private static String convertCamelCaseToUnderscore(String camelCase) {
         String regex = "([a-z])([A-Z]+)";
         String replacement = "$1_$2";
         return camelCase.replaceAll(regex, replacement).toLowerCase();
+    }
+
+    /**
+     * 生成带有驼峰命名别名的字段列表的SQL部分。
+     *
+     * @param modelClass 要为其生成字段列表的模型类。
+     * @return 字段列表的SQL字符串。
+     */
+    public static String generateSelectFieldsWithAliases(Class<?> modelClass) {
+        return Arrays.stream(modelClass.getDeclaredFields())
+                .map(field -> {
+                    String columnName = convertCamelCaseToUnderscore(field.getName());
+                    return columnName + " as " + field.getName();
+                })
+                .collect(Collectors.joining(", "));
     }
 }

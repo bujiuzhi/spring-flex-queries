@@ -24,10 +24,10 @@ public interface ModelMapper {
     /**
      * 根据作业ID查询模型作业信息。
      *
-     * @param jobId 作业ID
-     * @return 对应的模型作业对象
+     * @param jobId 作业ID。
+     * @return 返回对应的模型作业对象。
      */
-    @Select("SELECT * FROM test.stg_model_job WHERE job_id = #{jobId}")
+    @SelectProvider(type = ModelSqlProvider.class, method = "findBy")
     StgModelJob findBy(String jobId);
 
     /**
@@ -64,7 +64,7 @@ public interface ModelMapper {
      * @param algorithmName 模型算法名称
      * @return 对应的模型算法配置信息
      */
-    @Select("SELECT * FROM test.stg_algorithm_param WHERE algorithm_name = #{algorithmName}")
+    @Select("SELECT algorithm_parameters FROM test.stg_algorithm_param WHERE algorithm_name = #{algorithmName}")
     StgAlgorithmParam getAlgorithmParam(String algorithmName);
 
 }

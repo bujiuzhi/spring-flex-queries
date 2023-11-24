@@ -39,6 +39,8 @@ public class ModelServiceImpl implements ModelService {
             return Result.error("没有找到符合条件的模型作业");
         }
 
+        System.out.println(stgModelJobs);
+
         // 如果查询结果不为空，返回包含查询结果的Result对象
         return Result.success(stgModelJobs);
     }
