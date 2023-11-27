@@ -69,11 +69,6 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public Result insert(StgModelJob stgModelJob) {
-        //先对modelId和modelVersion进行非空判断
-//        if (stgModelJob.getModelId() == null || stgModelJob.getModelVersion() == null) {
-//            return Result.error("modelId和modelVersion不能为空");
-//        }
-
         String jobId = ModelUtils.generateJobId(stgModelJob.getModelId(), stgModelJob.getModelVersion());
         stgModelJob.setJobId(jobId);
         //stgModelJob.setCreationTime(LocalDateTime.now());
@@ -82,7 +77,7 @@ public class ModelServiceImpl implements ModelService {
         int insertCount = modelMapper.insert(stgModelJob, "test.stg_model_job");
         if (insertCount > 0) {
             // 插入成功
-            String triggerJobResult = ModelUtils.triggerJob(jobId, stgModelJob);
+            String triggerJobResult = ModelUtils.triggerJob(stgModelJob);
             return Result.success("模型作业添加成功，且已触发，返回信息如下：" + triggerJobResult);
             //触发job
         } else {
@@ -100,11 +95,6 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public Result update(StgModelJob stgModelJob) {
-        //先对jobId进行非空判断
-//        if (stgModelJob.getJobId() == null) {
-//            return Result.error("jobId不能为空");
-//        }
-
         // 检查是否存在匹配的模型ID和版本
         StgModelJob existingJob = modelMapper.findBy(stgModelJob.getJobId());
         if (existingJob == null) {
@@ -118,9 +108,9 @@ public class ModelServiceImpl implements ModelService {
         if (updateCount > 0) {
             // 更新成功
             //先停止job
-            String stopJobResult = ModelUtils.stopJob(stgModelJob.getJobId(), stgModelJob);
+            String stopJobResult = ModelUtils.stopJob(stgModelJob);
             //再触发job
-            String triggerJobResult = ModelUtils.triggerJob(stgModelJob.getJobId(), stgModelJob);
+            String triggerJobResult = ModelUtils.triggerJob(stgModelJob);
             return Result.success("模型作业更新成功,返回信息如下：" + stopJobResult + "；" + triggerJobResult);
         } else {
             // 更新失败
@@ -160,52 +150,48 @@ public class ModelServiceImpl implements ModelService {
     /**
      * 触发模型作业。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 操作结果
      */
     @Override
-    public Result triggerJob(String jobId, StgModelJob stgModelJob) {
-        String message = ModelUtils.triggerJob(jobId, stgModelJob);
+    public Result triggerJob(StgModelJob stgModelJob) {
+        String message = ModelUtils.triggerJob(stgModelJob);
         return Result.success(message);
     }
 
     /**
      * 查询模型作业状态。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 状态信息
      */
     @Override
-    public Result queryJobStatus(String jobId, StgModelJob stgModelJob) {
-        String message = ModelUtils.queryStatus(jobId, stgModelJob);
+    public Result queryJobStatus(StgModelJob stgModelJob) {
+        String message = ModelUtils.queryStatus(stgModelJob);
         return Result.success(message);
     }
 
     /**
      * 下载模型作业日志。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 日志信息
      */
     @Override
-    public Result downloadJobJournal(String jobId, StgModelJob stgModelJob) {
-        String message = ModelUtils.downloadJournalLog(jobId, stgModelJob);
+    public Result downloadJobJournal(StgModelJob stgModelJob) {
+        String message = ModelUtils.downloadJournalLog(stgModelJob);
         return Result.success(message);
     }
 
     /**
      * 停止模型作业。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 操作结果
      */
     @Override
-    public Result stopJob(String jobId, StgModelJob stgModelJob) {
-        String message = ModelUtils.stopJob(jobId, stgModelJob);
+    public Result stopJob(StgModelJob stgModelJob) {
+        String message = ModelUtils.stopJob(stgModelJob);
         return Result.success(message);
     }
 }

@@ -7,53 +7,49 @@ public class ModelUtils {
     /**
      * 触发预定任务。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 触发结果的描述
      */
-    public static String triggerJob(String jobId, StgModelJob stgModelJob) {
+    public static String triggerJob(StgModelJob stgModelJob) {
         // 实现触发逻辑
         // 以下为示例实现，需要根据实际业务逻辑进行调整
-        return "事务 " + jobId + " 已触发模型作业，模型信息：" + stgModelJob.toString();
+        return "事务 " + stgModelJob.getJobId() + " 已触发模型作业，模型信息：" + stgModelJob.toString();
     }
 
     /**
      * 查询状态。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 状态查询结果的描述
      */
-    public static String queryStatus(String jobId, StgModelJob stgModelJob) {
+    public static String queryStatus(StgModelJob stgModelJob) {
         // 实现查询逻辑
         // 以下为示例实现，需要根据实际业务逻辑进行调整
-        return "事务 " + jobId + " 已查询模型作业状态，模型信息：" + stgModelJob.toString();
+        return "事务 " + stgModelJob.getJobId() + " 已查询模型作业状态，模型信息：" + stgModelJob.toString();
     }
 
     /**
      * 下载日志文件。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 日志下载结果的描述
      */
-    public static String downloadJournalLog(String jobId, StgModelJob stgModelJob) {
+    public static String downloadJournalLog(StgModelJob stgModelJob) {
         // 实现下载逻辑
         // 以下为示例实现，需要根据实际业务逻辑进行调整
-        return "事务 " + jobId + " 已下载模型作业日志，模型信息：" + stgModelJob.toString();
+        return "事务 " + stgModelJob.getJobId() + " 已下载模型作业日志，模型信息：" + stgModelJob.toString();
     }
 
     /**
      * 停止作业。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 停止作业结果的描述
      */
-    public static String stopJob(String jobId, StgModelJob stgModelJob) {
+    public static String stopJob(StgModelJob stgModelJob) {
         // 实现停止逻辑
         // 以下为示例实现，需要根据实际业务逻辑进行调整
-        return "事务 " + jobId + " 已停止模型作业，模型信息：" + stgModelJob.toString();
+        return "事务 " + stgModelJob.getJobId() + " 已停止模型作业，模型信息：" + stgModelJob.toString();
     }
 
     /**

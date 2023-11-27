@@ -57,38 +57,34 @@ public interface ModelService {
     /**
      * 触发模型作业。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 操作结果
      */
-    Result triggerJob(String jobId, StgModelJob stgModelJob);
+    Result triggerJob(StgModelJob stgModelJob);
 
     /**
      * 查询模型作业状态。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 状态信息
      */
-    Result queryJobStatus(String jobId, StgModelJob stgModelJob);
+    Result queryJobStatus(StgModelJob stgModelJob);
 
     /**
      * 下载模型作业日志。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 日志信息
      */
-    Result downloadJobJournal(String jobId, StgModelJob stgModelJob);
+    Result downloadJobJournal(StgModelJob stgModelJob);
 
     /**
      * 停止模型作业。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return 操作结果
      */
-    Result stopJob(String jobId, StgModelJob stgModelJob);
+    Result stopJob(StgModelJob stgModelJob);
 
 
 }

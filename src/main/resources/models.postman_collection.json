@@ -13,7 +13,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    // \"modelId\": \"mod001\",\n    \"modelCategory\": [\n        \"信用模型\",\n        \"归因模型\"\n    ],\n    \"sampleDivision\": [\n        \"训练数据\"\n    ],\n    \"algorithmName\": [\n        \"k-means\"\n    ],\n    \"triggerMechanism\": [\n        \"指标预警\",\n        \"定期触发\",\n        \"手工触发\"\n    ],\n    // \"creationTimeStart\": \"2023-01-01 04:00:00\",\n    \"creationTimeEnd\": \"2023-01-02 07:00:00\",\n    \"pageNumber\": 1,\n    \"pageSize\": 8\n}",
+          "raw": "{\n    // \"modelId\": \"mod001\",\n    \"modelCategory\": [\n        \"信用模型\",\n        \"归因模型\"\n    ],\n    \"sampleDivision\": [\n        \"训练数据\"\n    ],\n    \"algorithmName\": [\n        \"k-means\"\n    ],\n    \"triggerMechanism\": [\n        \"指标预警\",\n        \"定期触发\",\n        \"手工触发\"\n    ],\n    // \"creationTimeStart\": \"2023-01-01 04:00:00\",\n    \"creationTimeEnd\": \"2023-01-02 07:00:00\",\n    \"pageNumber\": 2,\n    \"pageSize\": 1\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -196,7 +196,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"modelId\": \"model_001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"Sample Model\"\n    // ...其他 StgModelJob 字段...\n}",
+          "raw": "{\n    \"jobId\": \"20230101010000_mod001_1.0\",\n    \"modelId\": \"model_001\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -204,7 +204,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/models/triggerJob?jobId=20230101080000_mod001_2.0",
+          "raw": "http://localhost:8080/models/triggerJob",
           "protocol": "http",
           "host": [
             "localhost"
@@ -213,12 +213,6 @@
           "path": [
             "models",
             "triggerJob"
-          ],
-          "query": [
-            {
-              "key": "jobId",
-              "value": "20230101080000_mod001_2.0"
-            }
           ]
         }
       },
@@ -231,7 +225,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"modelId\": \"model_001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"Sample Model\"\n    // ...其他 StgModelJob 字段...\n}",
+          "raw": "{\n    \"jobId\": \"20230101010000_mod001_1.0\",\n    \"modelId\": \"model_001\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -239,7 +233,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/models/queryJobStatus?jobId=20230101010000_mod001_1.0",
+          "raw": "http://localhost:8080/models/queryJobStatus",
           "protocol": "http",
           "host": [
             "localhost"
@@ -248,12 +242,6 @@
           "path": [
             "models",
             "queryJobStatus"
-          ],
-          "query": [
-            {
-              "key": "jobId",
-              "value": "20230101010000_mod001_1.0"
-            }
           ]
         }
       },
@@ -266,7 +254,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"modelId\": \"model_001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"Sample Model\"\n    // ...其他 StgModelJob 字段...\n}",
+          "raw": "{\n    \"jobId\": \"20230101010000_mod001_1.0\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -301,7 +289,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"modelId\": \"model_001\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"Sample Model\"\n    // ...其他 StgModelJob 字段...\n}",
+          "raw": "{\n    \"jobId\": \"20230101010000_mod001_1.0\",\n    \"modelId\": \"model_001\"\n}",
           "options": {
             "raw": {
               "language": "json"

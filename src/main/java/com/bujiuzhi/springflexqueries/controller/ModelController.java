@@ -89,52 +89,48 @@ public class ModelController {
      * 触发模型作业。
      * 根据传入的事务ID和模型作业实体，执行作业触发操作，并返回操作结果。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return Result     操作结果，包含成功或失败的消息
      */
     @PostMapping("/triggerJob")
-    public Result triggerJob(@RequestParam String jobId, @RequestBody StgModelJob stgModelJob) {
-        return modelService.triggerJob(jobId, stgModelJob);
+    public Result triggerJob(@RequestBody StgModelJob stgModelJob) {
+        return modelService.triggerJob(stgModelJob);
     }
 
     /**
      * 查询模型作业状态。
      * 根据传入的事务ID和模型作业实体，查询作业的当前状态，并返回状态信息。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return Result     操作结果，包含作业状态信息或失败的消息
      */
     @PostMapping("/queryJobStatus")
-    public Result queryJobStatus(@RequestParam String jobId, @RequestBody StgModelJob stgModelJob) {
-        return modelService.queryJobStatus(jobId, stgModelJob);
+    public Result queryJobStatus(@RequestBody StgModelJob stgModelJob) {
+        return modelService.queryJobStatus(stgModelJob);
     }
 
     /**
      * 下载模型作业日志。
      * 根据传入的事务ID和模型作业实体，执行日志下载操作，并返回操作结果。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return Result     操作结果，包含下载日志的消息或失败的消息
      */
     @PostMapping("/downloadJobJournal")
-    public Result downloadJobJournal(@RequestParam String jobId, @RequestBody StgModelJob stgModelJob) {
-        return modelService.downloadJobJournal(jobId, stgModelJob);
+    public Result downloadJobJournal(@RequestBody StgModelJob stgModelJob) {
+        return modelService.downloadJobJournal(stgModelJob);
     }
 
     /**
      * 停止模型作业。
      * 根据传入的事务ID和模型作业实体，执行作业停止操作，并返回操作结果。
      *
-     * @param jobId       事务ID
      * @param stgModelJob 模型作业实体
      * @return Result     操作结果，包含停止作业的消息或失败的消息
      */
     @PostMapping("/stopJob")
-    public Result stopJob(@RequestParam String jobId, @RequestBody StgModelJob stgModelJob) {
-        return modelService.stopJob(jobId, stgModelJob);
+    public Result stopJob(@RequestBody StgModelJob stgModelJob) {
+        return modelService.stopJob(stgModelJob);
     }
 
 }
