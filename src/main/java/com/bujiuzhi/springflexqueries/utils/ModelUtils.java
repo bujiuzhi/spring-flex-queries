@@ -53,15 +53,27 @@ public class ModelUtils {
     }
 
     /**
-     * 生成唯一作业ID。时间戳加模型ID和模型版本。
+     * 根据模型ID和模型版本生成唯一ID。
+     * 此方法会自动使用当前时间戳。
      *
-     * @param modelId      模型ID
-     * @param modelVersion 模型ID
-     * @return 作业ID
+     * @param modelId      模型ID，将会被转换为小写形式。
+     * @param modelVersion 模型版本，将会去除其中的小数点。
+     * @return 生成的唯一ID字符串。
      */
     public static String generateJobId(String modelId, String modelVersion) {
-        // 实现生成逻辑
-        // 以下为示例实现，需要根据实际业务逻辑进行调整
-        return System.currentTimeMillis() + modelId + modelVersion;
+        // 将模型ID转换为小写
+        String lowercaseModelId = modelId.toLowerCase();
+
+        // 移除模型版本中的小数点
+        String versionWithoutDots = modelVersion.replace(".", "dot");
+
+        // 获取当前时间的时间戳
+        long timestamp = System.currentTimeMillis();
+
+        // 组合模型ID、模型版本和时间戳生成唯一ID
+        String uniqueId = timestamp + "-" + lowercaseModelId + "-" + versionWithoutDots;
+
+        return uniqueId;
     }
+
 }

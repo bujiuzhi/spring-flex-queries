@@ -129,7 +129,7 @@ public class ModelSqlProvider {
                     String fieldName = field.getName();
                     String columnName = convertCamelCaseToUnderscore(fieldName);
                     // 跳过用作更新条件的主键字段。
-                    if (!"modelId".equals(fieldName) && !"modelVersion".equals(fieldName)) {
+                    if (!"jobId".equals(fieldName)) {
                         sql.SET(columnName + " = " + "'" + value.toString().replace("'", "''") + "'");
                     }
                 }

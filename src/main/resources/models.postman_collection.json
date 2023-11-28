@@ -118,7 +118,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"jobId\":\"20230101010000_mod001_1.0\",\n    \"modelId\": \"mod002\",\n    // \"modelVersion\": \"5.0\",\n    \"algorithmName\": \"k-means\",\n    \"algorithmParameters\": \"{\\\"clusters\\\": 666, \\\"iterations\\\": 666}\",\n    \"taskDescription\": \"更新算法参数\",\n    \"updater\": \"李四\",\n    \"updateTime\": \"2023-11-22 15:00:00\"\n}",
+          "raw": "{\n    \"jobId\":\"20230101010000-mod001-1dot0\",\n    \"modelId\": \"mod002\",\n    \"modelVersion\": \"5.0\",\n    \"algorithmName\": \"k-means\",\n    \"algorithmParameters\": \"{\\\"clusters\\\": 666, \\\"iterations\\\": 666}\",\n    \"taskDescription\": \"更新算法参数\",\n    \"updater\": \"李四\",\n    \"updateTime\": \"2023-11-22 15:00:00\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -196,7 +196,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"jobId\": \"20230101010000_mod001_1.0\",\n    \"modelId\": \"model_001\"\n}",
+          "raw": "{\n    \"jobId\":\"20230101010000-mod001-1dot0\",\n    \"modelId\": \"model_001\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -225,7 +225,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"jobId\": \"20230101010000_mod001_1.0\",\n    \"modelId\": \"model_001\"\n}",
+          "raw": "{\n    \"jobId\":\"20230101010000-mod001-1dot0\",\n    \"modelId\": \"model_001\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -254,7 +254,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"jobId\": \"20230101010000_mod001_1.0\"\n}",
+          "raw": "{\n    \"jobId\":\"20230101010000-mod001-1dot0\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -289,7 +289,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"jobId\": \"20230101010000_mod001_1.0\",\n    \"modelId\": \"model_001\"\n}",
+          "raw": "{\n    \"jobId\":\"20230101010000-mod001-1dot0\",\n    \"modelId\": \"model_001\"\n}",
           "options": {
             "raw": {
               "language": "json"
