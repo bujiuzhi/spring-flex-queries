@@ -19,7 +19,7 @@ public class StgModelJob {
     private String modelId; // 模型ID，在插入操作时不能为空
 
     @NotBlank(message = "模型版本不能为空", groups = Insert.class)
-    private String modelVersion; // 模型版本，在插入操作时不能为空
+    private String modelVersion; // 模型版本
 
     private String modelName; // 模型的名称
 

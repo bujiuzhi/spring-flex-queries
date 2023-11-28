@@ -93,7 +93,7 @@ public class ModelController {
      * @return Result     操作结果，包含成功或失败的消息
      */
     @PostMapping("/triggerJob")
-    public Result triggerJob(@RequestBody StgModelJob stgModelJob) {
+    public Result triggerJob(@Validated({StgModelJob.Update.class, StgModelJob.Insert.class}) @RequestBody StgModelJob stgModelJob) {
         return modelService.triggerJob(stgModelJob);
     }
 
@@ -105,7 +105,7 @@ public class ModelController {
      * @return Result     操作结果，包含作业状态信息或失败的消息
      */
     @PostMapping("/queryJobStatus")
-    public Result queryJobStatus(@RequestBody StgModelJob stgModelJob) {
+    public Result queryJobStatus(@Validated({StgModelJob.Update.class, StgModelJob.Insert.class}) @RequestBody StgModelJob stgModelJob) {
         return modelService.queryJobStatus(stgModelJob);
     }
 
@@ -117,7 +117,7 @@ public class ModelController {
      * @return Result     操作结果，包含下载日志的消息或失败的消息
      */
     @PostMapping("/downloadJobJournal")
-    public Result downloadJobJournal(@RequestBody StgModelJob stgModelJob) {
+    public Result downloadJobJournal(@Validated(StgModelJob.Update.class) @RequestBody StgModelJob stgModelJob) {
         return modelService.downloadJobJournal(stgModelJob);
     }
 
@@ -129,7 +129,7 @@ public class ModelController {
      * @return Result     操作结果，包含停止作业的消息或失败的消息
      */
     @PostMapping("/stopJob")
-    public Result stopJob(@RequestBody StgModelJob stgModelJob) {
+    public Result stopJob(@Validated({StgModelJob.Update.class, StgModelJob.Insert.class}) @RequestBody StgModelJob stgModelJob) {
         return modelService.stopJob(stgModelJob);
     }
 
