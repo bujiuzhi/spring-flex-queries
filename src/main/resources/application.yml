@@ -14,7 +14,7 @@ logging:
 
 mybatis:
   configuration:
-    map-underscore-to-camel-case: true #?????????????????
+    map-underscore-to-camel-case: true # 开启驼峰和下划线的映射
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
   port: 8080

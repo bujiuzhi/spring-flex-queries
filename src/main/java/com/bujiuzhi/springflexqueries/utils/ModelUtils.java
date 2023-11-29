@@ -1,6 +1,8 @@
 package com.bujiuzhi.springflexqueries.utils;
 
 import com.bujiuzhi.springflexqueries.pojo.StgModelJob;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ModelUtils {
 
@@ -25,7 +27,16 @@ public class ModelUtils {
     public static String queryStatus(StgModelJob stgModelJob) {
         // 实现查询逻辑
         // 以下为示例实现，需要根据实际业务逻辑进行调整
-        return "事务 " + stgModelJob.getJobId() + " 已查询模型作业状态，模型信息：" + stgModelJob.toString();
+        JSONObject statusJson = new JSONObject();
+
+        // 示例状态值，实际逻辑中应根据业务需求确定状态值
+        try {
+            statusJson.put("ExecRslt", "200");
+            statusJson.put("BsnRecptCmnt", "运行成功");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return statusJson.toString();
     }
 
     /**

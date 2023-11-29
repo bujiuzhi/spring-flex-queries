@@ -31,6 +31,14 @@ public interface ModelMapper {
     StgModelJob findBy(String jobId);
 
     /**
+     * 从数据库中查询所有处于“运行中”状态的模型作业。
+     *
+     * @return 处于“运行中”状态的模型作业列表
+     */
+    @SelectProvider(type = ModelSqlProvider.class, method = "findRunningJobs")
+    List<StgModelJob> findRunningJobs();
+
+    /**
      * 插入新的模型作业记录到数据库。
      *
      * @param stgModelJob 新的模型作业对象。

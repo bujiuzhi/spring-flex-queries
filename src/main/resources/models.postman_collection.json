@@ -62,7 +62,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/models/findBy?jobId=20230101080000_mod001_2.0",
+          "raw": "http://localhost:8080/models/findBy?jobId=20230101010000-mod001-1dot0",
           "protocol": "http",
           "host": [
             "localhost"
@@ -75,8 +75,28 @@
           "query": [
             {
               "key": "jobId",
-              "value": "20230101080000_mod001_2.0"
+              "value": "20230101010000-mod001-1dot0"
             }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "findRunningJobs",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/models/findRunningJobs",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "models",
+            "findRunningJobs"
           ]
         }
       },
@@ -89,7 +109,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"modelId\": \"mod006\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"新的模型\",\n    \"modelCategory\": \"新的分类\",\n    \"algorithmName\": \"new_algorithm\",\n    \"algorithmParameters\": \"{\\\"param1\\\": 10, \\\"param2\\\": 20}\",\n    \"sampleDivision\": \"新的样本划分\",\n    \"trainingProgress\": \"30%\",\n    \"modelStatus\": \"待训练\",\n    \"triggerMechanism\": \"手工触发\",\n    \"lastTrainingTime\": \"\",\n    \"lastTrainingDuration\": \"\",\n    \"taskDescription\": \"新模型的训练任务\",\n    \"successCriteria\": \"{\\\"accuracy\\\": 0.95}\",\n    \"dataSet\": \"new_dataset\",\n    \"dataSetStartDate\": \"2023-11-23\",\n    \"dataSetEndDate\": \"2023-12-31\",\n    \"trainingDataPercentage\": 70.0,\n    \"testDataPercentage\": 30.0,\n    \"samplingMethod\": \"分层\",\n    \"performanceMetrics\": \"{\\\"F1\\\": 0.94}\",\n    \"updateFrequency\": \"每周\",\n    \"monitoringFrequency\": \"每周\",\n    \"optimizationGoal\": \"最小化误差\",\n    \"effectiveTime\": \"{\\\"start\\\": \\\"2023-11-23 00:00:00\\\", \\\"end\\\": \\\"2024-12-31 00:00:00\\\"}\",\n    \"monitoringScenario\": \"新的监控场景\",\n    \"modelPmml\": \"<新的PMML_data>\",\n    \"sampleData\": \"<新的Sample_data>\",\n    \"creator\": \"王五\",\n    \"creationTime\": \"2023-11-23 08:00:00\",\n    \"updater\": \"\",\n    \"updateTime\": \"\"\n}",
+          "raw": "{\n    \"modelId\": \"mod006\",\n    \"modelVersion\": \"1.0\",\n    \"modelName\": \"新的模型\",\n    \"modelCategory\": \"新的分类\",\n    \"algorithmName\": \"new_algorithm\",\n    \"algorithmParameters\": \"{\\\"param1\\\": 10, \\\"param2\\\": 20}\",\n    \"sampleDivision\": \"新的样本划分\",\n    \"triggerMechanism\": \"手工触发\",\n    \"taskDescription\": \"新模型的训练任务\",\n    \"successCriteria\": \"{\\\"accuracy\\\": 0.95}\",\n    \"dataSet\": \"new_dataset\",\n    \"dataSetStartDate\": \"2023-11-23\",\n    \"dataSetEndDate\": \"2023-12-31\",\n    \"trainingDataPercentage\": 70.0,\n    \"testDataPercentage\": 30.0,\n    \"samplingMethod\": \"分层\",\n    \"performanceMetrics\": \"{\\\"F1\\\": 0.94}\",\n    \"updateFrequency\": \"每周\",\n    \"monitoringFrequency\": \"每周\",\n    \"optimizationGoal\": \"最小化误差\",\n    \"effectiveTime\": \"{\\\"start\\\": \\\"2023-11-23 00:00:00\\\", \\\"end\\\": \\\"2024-12-31 00:00:00\\\"}\",\n    \"monitoringScenario\": \"新的监控场景\",\n    \"modelPmml\": \"<新的PMML_data>\",\n    \"sampleData\": \"<新的Sample_data>\",\n    \"creator\": \"王五\"\n}",
           "options": {
             "raw": {
               "language": "json"

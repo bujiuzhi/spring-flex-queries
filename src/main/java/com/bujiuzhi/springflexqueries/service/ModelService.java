@@ -24,6 +24,13 @@ public interface ModelService {
     Result findBy(String jobId);
 
     /**
+     * 查询所有处于“运行中”状态的模型作业。
+     *
+     * @return 返回包含查询结果的Result对象。如果没有查询到数据，返回错误信息。
+     */
+    public Result findRunningJobs();
+
+    /**
      * 新增模型作业记录。
      *
      * @param stgModelJob 包含新增信息的模型作业对象

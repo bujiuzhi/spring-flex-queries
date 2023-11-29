@@ -43,6 +43,16 @@ public class ModelController {
     }
 
     /**
+     * 获取所有处于“运行中”状态的模型作业。
+     *
+     * @return 包含所有“运行中”模型作业的Result对象
+     */
+    @PostMapping("/findRunningJobs")
+    public Result findRunningJobs() {
+        return modelService.findRunningJobs();
+    }
+
+    /**
      * 新增一个模型作业记录。
      *
      * @param stgModelJob 模型作业对象，包含所需新增信息

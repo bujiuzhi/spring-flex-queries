@@ -10,6 +10,7 @@ import com.bujiuzhi.springflexqueries.utils.ModelUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -62,6 +63,20 @@ public class ModelServiceImpl implements ModelService {
     }
 
     /**
+     * 查询所有处于“运行中”状态的模型作业。
+     *
+     * @return 返回包含查询结果的Result对象。如果没有查询到数据，返回错误信息。
+     */
+    @Override
+    public Result findRunningJobs() {
+        List<StgModelJob> stgModelJobs = modelMapper.findRunningJobs();
+        if (stgModelJobs == null || stgModelJobs.isEmpty()) {
+            return Result.error("没有运行中的模型作业");
+        }
+        return Result.success(stgModelJobs);
+    }
+
+    /**
      * 新增模型作业记录。
      *
      * @param stgModelJob 包含新增信息的模型作业对象
@@ -71,7 +86,10 @@ public class ModelServiceImpl implements ModelService {
     public Result insert(StgModelJob stgModelJob) {
         String jobId = ModelUtils.generateJobId(stgModelJob.getModelId(), stgModelJob.getModelVersion());
         stgModelJob.setJobId(jobId);
-        //stgModelJob.setCreationTime(LocalDateTime.now());
+        stgModelJob.setCreationTime(LocalDateTime.now());
+        stgModelJob.setLastTrainingTime(LocalDateTime.now());
+        stgModelJob.setModelStatus("运行中");
+        stgModelJob.setTrainingProgress(50.0F);
 
         // 执行插入操作
         int insertCount = modelMapper.insert(stgModelJob, "test.stg_model_job");
@@ -155,6 +173,7 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public Result triggerJob(StgModelJob stgModelJob) {
+        stgModelJob.setLastTrainingTime(LocalDateTime.now());
         String message = ModelUtils.triggerJob(stgModelJob);
         return Result.success(message);
     }

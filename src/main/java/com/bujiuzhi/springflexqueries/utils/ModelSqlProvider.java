@@ -107,6 +107,19 @@ public class ModelSqlProvider {
         return sql.toString();
     }
 
+    /**
+     * 动态生成查询所有“运行中”状态模型作业的SQL语句。
+     * 使用反射生成带有别名的字段列表，确保数据库字段的下划线命名风格
+     * 能够正确映射到Java对象的驼峰命名属性上。
+     *
+     * @return 返回完整的SQL查询语句。
+     */
+    public String findRunningJobs() {
+        SQL sql = new SQL();
+        String fieldsWithAliases = generateSelectFieldsWithAliases(StgModelJob.class);
+        sql.SELECT(fieldsWithAliases).FROM("test.stg_model_job").WHERE("model_status = '运行中'");
+        return sql.toString();
+    }
 
     /**
      * 动态构建用于更新操作的SQL语句。

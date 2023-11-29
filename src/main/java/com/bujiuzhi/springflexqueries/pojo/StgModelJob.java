@@ -31,7 +31,7 @@ public class StgModelJob {
 
     private String sampleDivision; // 样本划分，例如训练数据、验证数据、测试数据
 
-    private String trainingProgress; // 训练进度，以百分比表示
+    private Float trainingProgress; // 训练进度，以百分比表示
 
     private String modelStatus; // 模型状态，例如训练中、训练完成
 
