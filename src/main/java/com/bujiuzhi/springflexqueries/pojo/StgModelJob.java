@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 /**
  * 模型作业实体类，对应数据库中的stg_model_job表。
  */
@@ -38,7 +35,8 @@ public class StgModelJob {
     private String triggerMechanism; // 触发机制（更新策略），例如指标预警、手工触发、定期触发
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastTrainingTime; // 最近一次训练的时间
+//    private LocalDateTime lastTrainingTime; // 最近一次训练的时间
+    private String lastTrainingTime; // 最近一次训练的时间
 
     private String lastTrainingDuration; // 最近一次训练的耗时，例如1小时
 
@@ -49,10 +47,12 @@ public class StgModelJob {
     private String dataSet; // 数据集名称
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dataSetStartDate; // 数据集起始日期
+//    private LocalDate dataSetStartDate; // 数据集起始日期
+    private String dataSetStartDate; // 数据集起始日期
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dataSetEndDate; // 数据集结束日期
+//    private LocalDate dataSetEndDate; // 数据集结束日期
+    private String dataSetEndDate; // 数据集结束日期
 
     private Float trainingDataPercentage; // 训练数据所占的百分比
 
@@ -79,12 +79,14 @@ public class StgModelJob {
     private String creator; // 创建者
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime creationTime; // 创建时间
+//    private LocalDateTime creationTime; // 创建时间
+    private String creationTime; // 创建时间
 
     private String updater; // 更新者
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime; // 更新时间
+//    private LocalDateTime updateTime; // 更新时间
+    private String updateTime; // 更新时间
 
 
     //public interface Insert extends Default {}

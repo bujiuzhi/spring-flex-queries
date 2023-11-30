@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -84,10 +85,14 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public Result insert(StgModelJob stgModelJob) {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         String jobId = ModelUtils.generateJobId(stgModelJob.getModelId(), stgModelJob.getModelVersion());
         stgModelJob.setJobId(jobId);
-        stgModelJob.setCreationTime(LocalDateTime.now());
-        stgModelJob.setLastTrainingTime(LocalDateTime.now());
+//        stgModelJob.setCreationTime(LocalDateTime.now());
+        stgModelJob.setCreationTime(now.format(dateTimeFormatter));
+        stgModelJob.setLastTrainingTime(now.format(dateTimeFormatter));
         stgModelJob.setModelStatus("运行中");
         stgModelJob.setTrainingProgress(50.0F);
 
@@ -173,7 +178,12 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public Result triggerJob(StgModelJob stgModelJob) {
-        stgModelJob.setLastTrainingTime(LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        stgModelJob.setLastTrainingTime(now.format(dateTimeFormatter));
+        stgModelJob.setUpdater("job重训练");
+        stgModelJob.setUpdateTime(now.format(dateTimeFormatter));
+        modelMapper.update(stgModelJob, "test.stg_model_job");
         String message = ModelUtils.triggerJob(stgModelJob);
         return Result.success(message);
     }
@@ -210,7 +220,13 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public Result stopJob(StgModelJob stgModelJob) {
-        String message = ModelUtils.stopJob(stgModelJob);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        stgModelJob.setUpdater("job停止");
+        stgModelJob.setUpdateTime(now.format(dateTimeFormatter));
+        stgModelJob.setModelStatus("运行失败");
+        modelMapper.update(stgModelJob, "test.stg_model_job");
+        String message = ModelUtils.triggerJob(stgModelJob);
         return Result.success(message);
     }
 }

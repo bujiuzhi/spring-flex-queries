@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -47,8 +48,9 @@ public class ModelStatusUpdater {
             // 根据不同状态设置持续时间
             if ("运行成功".equals(currentStatus)) {
                 job.setTrainingProgress(100.0F);
-                LocalDateTime nowTime = LocalDateTime.now();
-                Duration duration = Duration.between(job.getLastTrainingTime(), nowTime);
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                Duration duration = Duration.between(LocalDateTime.parse(job.getLastTrainingTime(), dateTimeFormatter), now);
                 // 计算天数、小时数、分钟数和秒数
                 long days = duration.toDays();
                 long hours = duration.toHours() % 24;
@@ -56,7 +58,7 @@ public class ModelStatusUpdater {
                 long seconds = duration.getSeconds() % 60;
                 job.setLastTrainingDuration(days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒");
                 job.setUpdater("定时任务更新模型状态");
-                job.setUpdateTime(nowTime);
+                job.setUpdateTime(now.format(dateTimeFormatter));
             } else if ("运行失败".equals(currentStatus) || "没有状态".equals(currentStatus)) {
                 job.setTrainingProgress(0.0F);
                 job.setLastTrainingDuration("异常"); // 使用特定的异常值表示持续时间
