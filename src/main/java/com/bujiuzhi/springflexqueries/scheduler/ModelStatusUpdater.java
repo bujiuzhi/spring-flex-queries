@@ -1,10 +1,11 @@
 package com.bujiuzhi.springflexqueries.scheduler;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.bujiuzhi.springflexqueries.mapper.ModelMapper;
 import com.bujiuzhi.springflexqueries.pojo.StgModelJob;
 import com.bujiuzhi.springflexqueries.utils.ModelUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,7 @@ public class ModelStatusUpdater {
             JSONObject statusObj = null;
             String currentStatus = null;
             try {
-                statusObj = new JSONObject(jsonStatus);
+                statusObj = JSON.parseObject(jsonStatus);
                 // 获取模型作业的当前状态
                 currentStatus = statusObj.getString("BsnRecptCmnt");
             } catch (JSONException e) {
@@ -61,6 +62,7 @@ public class ModelStatusUpdater {
                 job.setUpdateTime(now.format(dateTimeFormatter));
             } else if ("运行失败".equals(currentStatus) || "没有状态".equals(currentStatus)) {
                 job.setTrainingProgress(0.0F);
+                job.setModelStatus(currentStatus);
                 job.setLastTrainingDuration("异常"); // 使用特定的异常值表示持续时间
             }
 

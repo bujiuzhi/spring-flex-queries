@@ -1,8 +1,8 @@
 package com.bujiuzhi.springflexqueries.utils;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.bujiuzhi.springflexqueries.pojo.StgModelJob;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class ModelUtils {
 
