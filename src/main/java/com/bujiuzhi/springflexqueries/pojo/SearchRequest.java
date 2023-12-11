@@ -22,7 +22,7 @@ public class SearchRequest {
     private List<String> sampleDivision;
 
     // 模型算法列表，可以为空
-    private List<String> modelAlgorithm;
+    private List<String> algorithmName;
 
     // 触发机制列表，可以为空
     private List<String> triggerMechanism;
