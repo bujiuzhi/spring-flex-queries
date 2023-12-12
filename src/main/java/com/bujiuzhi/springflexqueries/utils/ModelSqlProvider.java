@@ -50,8 +50,10 @@ public class ModelSqlProvider {
                     } else if ("creationTimeEnd".equals(fieldName)) {
                         sql.WHERE("creation_time" + " <= " + "'" + searchRequest.getCreationTimeEnd() + "'");
                     } else if (!"pageNumber".equals(fieldName) && !"pageSize".equals(fieldName)) {
-                        // 其他非集合字段直接构建等于条件,比如modelId
-                        sql.WHERE(columnName + " = " + "'" + value.toString().replace("'", "''") + "'");
+                        // 其他非集合字段直接构建等于条件,比如modelId，如果为null或者为空字符串，则不写入查询条件
+                        if (value.toString().length() > 0) {
+                            sql.WHERE(columnName + " = " + "'" + value.toString().replace("'", "''") + "'");
+                        }
                     }
                 } else {
                     // 处理集合类型字段，使用IN条件
