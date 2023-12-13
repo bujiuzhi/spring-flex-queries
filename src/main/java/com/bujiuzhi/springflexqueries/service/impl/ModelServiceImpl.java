@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ModelServiceImpl implements ModelService {
@@ -44,7 +46,28 @@ public class ModelServiceImpl implements ModelService {
         System.out.println(stgModelJobs);
 
         // 如果查询结果不为空，返回包含查询结果的Result对象
-        return Result.success(stgModelJobs);
+
+        // 获取满足条件的总数据量
+        int totalRecords = modelMapper.count(searchRequest, "test.stg_model_job");
+
+        // 计算总页数
+        int totalPages = (int) Math.ceil((double) totalRecords / searchRequest.getPageSize());
+
+        // 将分页信息放入Map中
+        Map<String, Object> paginationInfo = new HashMap<>();
+        paginationInfo.put("pageNumber", searchRequest.getPageNumber());
+        paginationInfo.put("pageSize", searchRequest.getPageSize());
+        paginationInfo.put("totalRecords", totalRecords);
+        paginationInfo.put("totalPages", totalPages);
+
+        // 创建包含数据和分页信息的Map
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("list", stgModelJobs);
+        responseData.put("pagination", paginationInfo);
+
+        // 返回Result对象，包含responseData
+        return Result.success(responseData);
+
     }
 
     /**
@@ -118,6 +141,8 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public Result update(StgModelJob stgModelJob) {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         // 检查是否存在匹配的模型ID和版本
         StgModelJob existingJob = modelMapper.findBy(stgModelJob.getJobId());
         if (existingJob == null) {
@@ -126,15 +151,11 @@ public class ModelServiceImpl implements ModelService {
         }
 
         // 存在匹配的记录，执行更新操作
-        //stgModelJob.setUpdateTime(LocalDateTime.now());
+        stgModelJob.setUpdateTime(now.format(dateTimeFormatter));
         int updateCount = modelMapper.update(stgModelJob, "test.stg_model_job");
         if (updateCount > 0) {
             // 更新成功
-            //先停止job
-            String stopJobResult = ModelUtils.stopJob(stgModelJob);
-            //再触发job
-            String triggerJobResult = ModelUtils.triggerJob(stgModelJob);
-            return Result.success("模型作业更新成功,返回信息如下：" + stopJobResult + "；" + triggerJobResult);
+            return Result.success("模型作业更新成功");
         } else {
             // 更新失败
             return Result.error("模型作业更新失败");

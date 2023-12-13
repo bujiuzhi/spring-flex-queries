@@ -25,73 +25,77 @@ public class ModelSqlProvider {
         SQL sql = new SQL();
 
         // 获取StgModelJob类的所有字段，创建SELECT语句
-//        sql.SELECT("*");
         String fieldsWithAliases = generateSelectFieldsWithAliases(StgModelJob.class);
-        sql.SELECT(fieldsWithAliases);
+        sql.SELECT(fieldsWithAliases).FROM(tableName);
 
-        sql.FROM(tableName);
-
-        // 通过反射获取SearchRequest中的所有字段
-        for (Field field : SearchRequest.class.getDeclaredFields()) {
-            field.setAccessible(true); // 确保私有字段也可以访问
-            try {
-                Object value = field.get(searchRequest);
-                String fieldName = field.getName();
-                String columnName = convertCamelCaseToUnderscore(fieldName);
-
-                if (value == null) {
-                    continue; // 跳过null值字段
-                }
-
-                // 对于非集合类型的字段，如果不为空，则生成条件语句
-                if (!Collection.class.isAssignableFrom(field.getType())) {
-                    if ("creationTimeStart".equals(fieldName)) {
-                        sql.WHERE("creation_time" + " >=" + "'" + searchRequest.getCreationTimeStart() + "'");
-                    } else if ("creationTimeEnd".equals(fieldName)) {
-                        sql.WHERE("creation_time" + " <= " + "'" + searchRequest.getCreationTimeEnd() + "'");
-                    } else if (!"pageNumber".equals(fieldName) && !"pageSize".equals(fieldName)) {
-                        // 其他非集合字段直接构建等于条件,比如modelId，如果为null或者为空字符串，则不写入查询条件
-                        if (value.toString().length() > 0) {
-                            sql.WHERE(columnName + " = " + "'" + value.toString().replace("'", "''") + "'");
-                        }
-                    }
-                } else {
-                    // 处理集合类型字段，使用IN条件
-                    Collection<?> collection = (Collection<?>) value;
-                    if (!collection.isEmpty()) {
-                        String inClause = collection.stream()
-                                .map(obj -> "'" + obj.toString().replace("'", "''") + "'")
-                                .collect(Collectors.joining(", "));
-                        sql.WHERE(columnName + " IN (" + inClause + ")");
-                    }
-                }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+        // 动态构建 WHERE 条件
+        String whereConditions = generateSqlConditions(searchRequest);
+        if (!whereConditions.isEmpty()) {
+            sql.WHERE(whereConditions);
         }
 
         // 添加分页逻辑
-//        if (searchRequest.getPageNumber() != null && searchRequest.getPageSize() != null) {
-//            int offset = (searchRequest.getPageNumber() - 1) * searchRequest.getPageSize();
-//            sql.LIMIT(searchRequest.getPageSize()).OFFSET(offset);
-//        }
-
-        // 添加传统的分页逻辑
-        // 检查分页参数是否存在
         if (searchRequest.getPageNumber() != null && searchRequest.getPageSize() != null) {
-            // 计算分页的偏移量
             int offset = (searchRequest.getPageNumber() - 1) * searchRequest.getPageSize();
-
-            // 将 LIMIT 和 OFFSET 直接作为字符串拼接到查询中
-            String limitOffsetClause = " LIMIT " + searchRequest.getPageSize() + " OFFSET " + offset;
-
-            // 返回最终构建的 SQL 语句
-            return sql.toString() + limitOffsetClause;
+            sql.LIMIT(searchRequest.getPageSize()).OFFSET(offset);
         }
 
-        System.out.println(sql.toString());
-        // 返回构建完成的SQL语句
         return sql.toString();
+    }
+
+    /**
+     * 根据搜索请求动态构建计算总数据量的 SQL 查询语句。
+     *
+     * @param searchRequest 包含搜索条件的对象
+     * @param tableName     需要查询的数据库表名
+     * @return 构建的用于计算总数据量的 SQL 查询语句
+     */
+    public String count(SearchRequest searchRequest, String tableName) {
+        SQL sql = new SQL();
+
+        sql.SELECT("COUNT(*)").FROM(tableName);
+
+        // 使用与 search 相同的方法构建 WHERE 条件
+        String whereConditions = generateSqlConditions(searchRequest);
+        if (!whereConditions.isEmpty()) {
+            sql.WHERE(whereConditions);
+        }
+
+        return sql.toString();
+    }
+
+    /**
+     * 根据搜索请求动态构建 SQL WHERE 条件。
+     *
+     * @param searchRequest 包含搜索条件的对象
+     * @return 构建的 SQL WHERE 条件字符串
+     */
+    private String generateSqlConditions(SearchRequest searchRequest) {
+        SQL sql = new SQL();
+
+        Arrays.stream(SearchRequest.class.getDeclaredFields())
+                .filter(field -> !field.getName().equals("pageNumber") && !field.getName().equals("pageSize"))
+                .forEach(field -> {
+                    field.setAccessible(true);
+                    try {
+                        Object value = field.get(searchRequest);
+                        if (value != null && !(value instanceof String && ((String) value).isEmpty())) {
+                            String columnName = convertCamelCaseToUnderscore(field.getName());
+                            if (value instanceof Collection && !((Collection<?>) value).isEmpty()) {
+                                String inClause = ((Collection<?>) value).stream()
+                                        .map(obj -> "'" + obj.toString().replace("'", "''") + "'")
+                                        .collect(Collectors.joining(", "));
+                                sql.WHERE(columnName + " IN (" + inClause + ")");
+                            } else {
+                                sql.WHERE(columnName + " = #{" + field.getName() + "}");
+                            }
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+        return sql.toString().replaceFirst("WHERE", "");
     }
 
     /**

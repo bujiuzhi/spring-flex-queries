@@ -23,6 +23,8 @@ public class StgAlgorithmParam {
 
     private String algorithmParameters; // 算法参数
 
+    private String modelId; // 模型ID
+
     private String creator; // 创建者
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

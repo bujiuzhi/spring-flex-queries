@@ -28,7 +28,7 @@ public class ModelStatusUpdater {
      * 定时任务，每60秒执行一次。
      * 用于定期检查并更新“运行中”的模型作业的状态。
      */
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 10000)
     public void updateModelStatusAndDuration() {
         // 查询所有“运行中”的模型作业
         List<StgModelJob> runningJobs = modelMapper.findRunningJobs();
@@ -63,7 +63,7 @@ public class ModelStatusUpdater {
             } else if ("运行失败".equals(currentStatus) || "没有状态".equals(currentStatus)) {
                 job.setTrainingProgress(0.0F);
                 job.setModelStatus(currentStatus);
-                job.setLastTrainingDuration("异常"); // 使用特定的异常值表示持续时间
+                job.setLastTrainingDuration("0天0小时0分钟0秒"); // 使用特定的异常值表示持续时间
             }
 
             job.setModelStatus(currentStatus);

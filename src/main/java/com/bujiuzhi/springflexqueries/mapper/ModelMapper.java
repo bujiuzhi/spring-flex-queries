@@ -22,6 +22,15 @@ public interface ModelMapper {
     List<StgModelJob> search(SearchRequest searchRequest, String tableName);
 
     /**
+     * 根据给定的搜索请求参数计算满足条件的数据总量。
+     *
+     * @param searchRequest 包含搜索条件的请求对象
+     * @return 满足条件的数据总量
+     */
+    @SelectProvider(type = ModelSqlProvider.class, method = "count")
+    int count(SearchRequest searchRequest, String tableName);
+
+    /**
      * 根据作业ID查询模型作业信息。
      *
      * @param jobId 作业ID。

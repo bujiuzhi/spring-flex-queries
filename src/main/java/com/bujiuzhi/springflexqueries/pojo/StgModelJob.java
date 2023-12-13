@@ -22,7 +22,7 @@ public class StgModelJob {
 
     private String modelCategory; // 模型分类，例如信用模型、归因模型、估值模型、预警模型
 
-    private String algorithmName; // 模型算法，例如k-means, clarans, cure, dbscan
+    private String algorithmName; // 模型算法，例如K-MEANS, CLARANS, CURE, DBSCAN
 
     private String algorithmParameters; // 算法的参数，通常以JSON格式存储
 
@@ -31,6 +31,8 @@ public class StgModelJob {
     private Float trainingProgress; // 训练进度，以百分比表示
 
     private String modelStatus; // 模型状态，例如训练中、训练完成
+
+    private String jobStatus; //任务状态，例如测试，运行，中断，下线
 
     private String triggerMechanism; // 触发机制（更新策略），例如指标预警、手工触发、定期触发
 
