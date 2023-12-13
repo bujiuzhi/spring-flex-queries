@@ -30,7 +30,7 @@ public class StgModelJob {
 
     private Float trainingProgress; // 训练进度，以百分比表示
 
-    private String modelStatus; // 模型状态，例如训练中、训练完成
+    private String modelStatus; // 模型状态，例如运行中、运行失败、运行成功
 
     private String jobStatus; //任务状态，例如测试，运行，中断，下线
 
