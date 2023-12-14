@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 /**
  * 模型算法实体类，对应数据库中的stg_model_algorithm表。
  */
@@ -28,10 +26,13 @@ public class StgAlgorithmParam {
     private String creator; // 创建者
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime creationTime; // 创建时间
+//    private LocalDateTime creationTime; // 创建时间
+    private String creationTime; // 创建时间
 
     private String updater; // 更新者
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime; // 更新时间
+//    private LocalDateTime updateTime; // 更新时间
+    private String updateTime; // 更新时间
+
 }

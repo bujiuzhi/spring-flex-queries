@@ -5,8 +5,10 @@ import com.bujiuzhi.springflexqueries.pojo.StgModelJob;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -71,10 +73,19 @@ public class ModelSqlProvider {
      * @return 构建的 SQL WHERE 条件字符串
      */
     private String generateSqlConditions(SearchRequest searchRequest) {
-        SQL sql = new SQL();
+        List<String> conditions = new ArrayList<>();
 
+        // 使用 searchRequest 对象的属性
+        if (searchRequest.getCreationTimeStart() != null) {
+            conditions.add("creation_time >= #{searchRequest.creationTimeStart}");
+        }
+        if (searchRequest.getCreationTimeEnd() != null) {
+            conditions.add("creation_time <= #{searchRequest.creationTimeEnd}");
+        }
+
+        // 处理其他字段的条件
         Arrays.stream(SearchRequest.class.getDeclaredFields())
-                .filter(field -> !field.getName().equals("pageNumber") && !field.getName().equals("pageSize"))
+                .filter(field -> !Arrays.asList("pageNumber", "pageSize", "creationTimeStart", "creationTimeEnd").contains(field.getName()))
                 .forEach(field -> {
                     field.setAccessible(true);
                     try {
@@ -85,9 +96,9 @@ public class ModelSqlProvider {
                                 String inClause = ((Collection<?>) value).stream()
                                         .map(obj -> "'" + obj.toString().replace("'", "''") + "'")
                                         .collect(Collectors.joining(", "));
-                                sql.WHERE(columnName + " IN (" + inClause + ")");
+                                conditions.add(columnName + " IN (" + inClause + ")");
                             } else {
-                                sql.WHERE(columnName + " = #{" + field.getName() + "}");
+                                conditions.add(columnName + " = #{" + field.getName() + "}");
                             }
                         }
                     } catch (IllegalAccessException e) {
@@ -95,7 +106,7 @@ public class ModelSqlProvider {
                     }
                 });
 
-        return sql.toString().replaceFirst("WHERE", "");
+        return conditions.isEmpty() ? "" : String.join(" AND ", conditions);
     }
 
     /**

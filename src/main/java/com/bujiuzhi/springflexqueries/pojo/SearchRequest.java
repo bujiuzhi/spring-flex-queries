@@ -3,7 +3,6 @@ package com.bujiuzhi.springflexqueries.pojo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -29,11 +28,13 @@ public class SearchRequest {
 
     // 创建时间的开始，查询这个时间之后的记录
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime creationTimeStart;
+//    private LocalDateTime creationTimeStart;
+    private String creationTimeStart;
 
     // 创建时间的结束，查询这个时间之前的记录
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime creationTimeEnd;
+//    private LocalDateTime creationTimeEnd;
+    private String creationTimeEnd;
 
     // 页码
     private Integer pageNumber;
