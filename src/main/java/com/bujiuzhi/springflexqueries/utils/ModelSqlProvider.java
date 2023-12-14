@@ -30,16 +30,21 @@ public class ModelSqlProvider {
         String fieldsWithAliases = generateSelectFieldsWithAliases(StgModelJob.class);
         sql.SELECT(fieldsWithAliases).FROM(tableName);
 
-        // 动态构建 WHERE 条件
-        String whereConditions = generateSqlConditions(searchRequest);
-        if (!whereConditions.isEmpty()) {
-            sql.WHERE(whereConditions);
+        // 获取条件
+        List<String> whereConditions = generateSqlConditions(searchRequest);
+        for (String condition : whereConditions) {
+            sql.WHERE(condition);
         }
 
         // 添加分页逻辑
+//        if (searchRequest.getPageNumber() != null && searchRequest.getPageSize() != null) {
+//            int offset = (searchRequest.getPageNumber() - 1) * searchRequest.getPageSize();
+//            sql.LIMIT(searchRequest.getPageSize()).OFFSET(offset);
+//        }
         if (searchRequest.getPageNumber() != null && searchRequest.getPageSize() != null) {
             int offset = (searchRequest.getPageNumber() - 1) * searchRequest.getPageSize();
-            sql.LIMIT(searchRequest.getPageSize()).OFFSET(offset);
+            String paginationClause = " LIMIT " + searchRequest.getPageSize() + " OFFSET " + offset;
+            return sql.toString() + paginationClause;
         }
 
         return sql.toString();
@@ -58,9 +63,10 @@ public class ModelSqlProvider {
         sql.SELECT("COUNT(*)").FROM(tableName);
 
         // 使用与 search 相同的方法构建 WHERE 条件
-        String whereConditions = generateSqlConditions(searchRequest);
-        if (!whereConditions.isEmpty()) {
-            sql.WHERE(whereConditions);
+        // 获取条件
+        List<String> whereConditions = generateSqlConditions(searchRequest);
+        for (String condition : whereConditions) {
+            sql.WHERE(condition);
         }
 
         return sql.toString();
@@ -70,43 +76,48 @@ public class ModelSqlProvider {
      * 根据搜索请求动态构建 SQL WHERE 条件。
      *
      * @param searchRequest 包含搜索条件的对象
-     * @return 构建的 SQL WHERE 条件字符串
+     * @return 构建的 SQL WHERE 条件列表
      */
-    private String generateSqlConditions(SearchRequest searchRequest) {
+    private List<String> generateSqlConditions(SearchRequest searchRequest) {
         List<String> conditions = new ArrayList<>();
 
-        // 使用 searchRequest 对象的属性
-        if (searchRequest.getCreationTimeStart() != null) {
-            conditions.add("creation_time >= #{searchRequest.creationTimeStart}");
-        }
-        if (searchRequest.getCreationTimeEnd() != null) {
-            conditions.add("creation_time <= #{searchRequest.creationTimeEnd}");
-        }
+        // 通过反射获取SearchRequest中的所有字段
+        for (Field field : SearchRequest.class.getDeclaredFields()) {
+            field.setAccessible(true); // 确保私有字段也可以访问
+            try {
+                Object value = field.get(searchRequest);
+                String fieldName = field.getName();
+                if (value == null || (value instanceof String && ((String) value).isEmpty())) {
+                    continue; // 跳过null值或空字符串字段
+                }
+                String columnName = convertCamelCaseToUnderscore(fieldName);
 
-        // 处理其他字段的条件
-        Arrays.stream(SearchRequest.class.getDeclaredFields())
-                .filter(field -> !Arrays.asList("pageNumber", "pageSize", "creationTimeStart", "creationTimeEnd").contains(field.getName()))
-                .forEach(field -> {
-                    field.setAccessible(true);
-                    try {
-                        Object value = field.get(searchRequest);
-                        if (value != null && !(value instanceof String && ((String) value).isEmpty())) {
-                            String columnName = convertCamelCaseToUnderscore(field.getName());
-                            if (value instanceof Collection && !((Collection<?>) value).isEmpty()) {
-                                String inClause = ((Collection<?>) value).stream()
-                                        .map(obj -> "'" + obj.toString().replace("'", "''") + "'")
-                                        .collect(Collectors.joining(", "));
-                                conditions.add(columnName + " IN (" + inClause + ")");
-                            } else {
-                                conditions.add(columnName + " = #{" + field.getName() + "}");
-                            }
-                        }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                // 对于非集合类型的字段，如果不为空，则生成条件语句
+                if (!Collection.class.isAssignableFrom(field.getType())) {
+                    if ("creationTimeStart".equals(fieldName)) {
+                        conditions.add("creation_time >= '" + searchRequest.getCreationTimeStart() + "'");
+                    } else if ("creationTimeEnd".equals(fieldName)) {
+                        conditions.add("creation_time <= '" + searchRequest.getCreationTimeEnd() + "'");
+                    } else if (!"pageNumber".equals(fieldName) && !"pageSize".equals(fieldName)) {
+                        // 其他非集合字段直接构建等于条件
+                        conditions.add(columnName + " = '" + value.toString().replace("'", "''") + "'");
                     }
-                });
+                } else {
+                    // 处理集合类型字段，使用IN条件
+                    Collection<?> collection = (Collection<?>) value;
+                    if (!collection.isEmpty()) {
+                        String inClause = collection.stream()
+                                .map(obj -> "'" + obj.toString().replace("'", "''") + "'")
+                                .collect(Collectors.joining(", "));
+                        conditions.add(columnName + " IN (" + inClause + ")");
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
 
-        return conditions.isEmpty() ? "" : String.join(" AND ", conditions);
+        return conditions;
     }
 
     /**
