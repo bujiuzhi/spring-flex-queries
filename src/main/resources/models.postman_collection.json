@@ -7,6 +7,51 @@
 	},
 	"item": [
 		{
+			"name": "getAttributeValues",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/models/getAttributeValues?attributeName=triggerMechanism",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"models",
+						"getAttributeValues"
+					],
+					"query": [
+						{
+							"key": "attributeName",
+							"value": "modelCategory",
+							"disabled": true
+						},
+						{
+							"key": "attributeName",
+							"value": "sampleDivision",
+							"disabled": true
+						},
+						{
+							"key": "attributeName",
+							"value": "algorithmName",
+							"disabled": true
+						},
+						{
+							"key": "attributeName",
+							"value": "triggerMechanism"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "search",
 			"request": {
 				"method": "POST",

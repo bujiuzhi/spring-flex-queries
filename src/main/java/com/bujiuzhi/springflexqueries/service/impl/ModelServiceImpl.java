@@ -23,6 +23,22 @@ public class ModelServiceImpl implements ModelService {
     private ModelMapper modelMapper;
 
     /**
+     * 根据属性名获取该属性的不同值。
+     *
+     * @param attributeName 属性名
+     * @return 返回操作结果，封装在Result对象中。
+     */
+    @Override
+    public Result getAttributeValues(String attributeName) {
+        List<String> values = modelMapper.getAttributeValues(attributeName);
+        if (values == null || values.isEmpty()) {
+            return Result.error("没有找到对应属性的值");
+        }
+        return Result.success(values);
+    }
+
+
+    /**
      * 根据给定的搜索请求进行数据库查询。
      *
      * @param searchRequest 搜索请求参数，包含过滤条件

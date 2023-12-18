@@ -17,6 +17,20 @@ import java.util.stream.Collectors;
 public class ModelSqlProvider {
 
     /**
+     * 动态构建SQL查询语句，用于查询指定属性的所有不同值。
+     *
+     * @param attributeName 属性名
+     * @return 返回SQL查询语句。
+     */
+    public String getAttributeValues(String attributeName) {
+        SQL sql = new SQL();
+        String columnName = convertCamelCaseToUnderscore(attributeName);
+        sql.SELECT("DISTINCT " + columnName).FROM("test.stg_model_job");
+        return sql.toString();
+    }
+
+
+    /**
      * 根据搜索请求动态构建SQL查询语句。
      *
      * @param searchRequest 包含搜索条件的对象

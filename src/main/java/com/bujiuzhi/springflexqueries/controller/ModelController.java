@@ -20,6 +20,17 @@ public class ModelController {
     private ModelService modelService;
 
     /**
+     * 处理根据属性名获取其不同值的POST请求。
+     *
+     * @param attributeName 属性名
+     * @return 返回操作结果，封装在Result对象中。如果操作成功，Result对象包含属性值列表；如果操作失败，包含相应的错误信息。
+     */
+    @PostMapping("/getAttributeValues")
+    public Result getAttributeValues(@RequestParam String attributeName) {
+        return modelService.getAttributeValues(attributeName);
+    }
+
+    /**
      * 处理搜索模型作业的POST请求。
      *
      * @param searchRequest 客户端发送的包含搜索条件的请求体

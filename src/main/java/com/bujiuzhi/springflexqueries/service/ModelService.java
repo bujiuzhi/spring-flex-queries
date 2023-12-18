@@ -8,6 +8,14 @@ import com.bujiuzhi.springflexqueries.pojo.StgModelJob;
 public interface ModelService {
 
     /**
+     * 根据属性名获取该属性的不同值。
+     *
+     * @param attributeName 属性名
+     * @return 返回操作结果，封装在Result对象中。
+     */
+    Result getAttributeValues(String attributeName);
+
+    /**
      * 根据搜索请求进行数据查询。
      *
      * @param searchRequest 包含搜索条件的请求对象

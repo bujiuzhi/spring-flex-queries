@@ -12,6 +12,15 @@ import java.util.List;
 public interface ModelMapper {
 
     /**
+     * 查询指定属性名的所有不同值。
+     *
+     * @param attributeName 属性名
+     * @return 返回属性值的列表。
+     */
+    @SelectProvider(type = ModelSqlProvider.class, method = "getAttributeValues")
+    List<String> getAttributeValues(String attributeName);
+
+    /**
      * 使用ModelSqlProvider类的search方法动态生成SQL语句，并执行查询操作。
      *
      * @param searchRequest 包含搜索条件的对象，用于生成SQL语句中的where条件。
