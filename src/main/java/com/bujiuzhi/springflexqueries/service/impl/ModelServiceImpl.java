@@ -15,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ModelServiceImpl implements ModelService {
@@ -23,16 +25,24 @@ public class ModelServiceImpl implements ModelService {
     private ModelMapper modelMapper;
 
     /**
-     * 根据属性名获取该属性的不同值。
+     * 根据指定的属性名查询该属性的所有不同非空值。
+     * 此方法从数据库中检索指定属性的所有唯一值，并过滤掉其中的空值。
      *
      * @param attributeName 属性名
      * @return 返回操作结果，封装在Result对象中。
      */
     @Override
     public Result getAttributeValues(String attributeName) {
+        if (attributeName == null || attributeName.trim().isEmpty()) {
+            return Result.error("属性名不能为空");
+        }
+
         List<String> values = modelMapper.getAttributeValues(attributeName);
-        if (values == null || values.isEmpty()) {
-            return Result.error("没有找到对应属性的值");
+        // 过滤掉列表中的null值
+        values = values.stream().filter(Objects::nonNull).collect(Collectors.toList());
+
+        if (values.isEmpty()) {
+            return Result.error("没有找到对应属性的非空值");
         }
         return Result.success(values);
     }

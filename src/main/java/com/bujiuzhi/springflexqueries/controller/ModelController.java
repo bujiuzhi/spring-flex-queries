@@ -20,7 +20,8 @@ public class ModelController {
     private ModelService modelService;
 
     /**
-     * 处理根据属性名获取其不同值的POST请求。
+     * 根据指定的属性名查询该属性的所有不同非空值。
+     * 此方法从数据库中检索指定属性的所有唯一值，并过滤掉其中的空值。
      *
      * @param attributeName 属性名
      * @return 返回操作结果，封装在Result对象中。如果操作成功，Result对象包含属性值列表；如果操作失败，包含相应的错误信息。

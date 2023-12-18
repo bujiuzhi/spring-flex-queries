@@ -12,7 +12,8 @@ import java.util.List;
 public interface ModelMapper {
 
     /**
-     * 查询指定属性名的所有不同值。
+     * 根据指定的属性名查询该属性的所有不同非空值。
+     * 此方法从数据库中检索指定属性的所有唯一值，并过滤掉其中的空值。
      *
      * @param attributeName 属性名
      * @return 返回属性值的列表。
