@@ -12,7 +12,8 @@ import lombok.Data;
  */
 @Data
 public class StgVoiceRecognition {
-    private String sessionId; // 会话ID
+
+    private String id; // 主键ID
 
     @NotBlank(message = "文件名称路径不能为空")
     private String filePath; // 文件名称

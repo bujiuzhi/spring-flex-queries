@@ -42,6 +42,7 @@ public interface DataMapper {
      * @return 返回插入的记录数
      */
     @InsertProvider(type = DataSqlProvider.class, method = "insertVoiceRecord")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insertVoiceRecord(StgVoiceRecognition stgVoiceRecognition);
 
     /**
