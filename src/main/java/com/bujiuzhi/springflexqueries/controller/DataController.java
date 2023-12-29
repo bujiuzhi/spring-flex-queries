@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 数据控制器
@@ -20,6 +21,17 @@ public class DataController {
 
     @Autowired
     private DataService dataService;
+
+    /**
+     * 文件上传，保存在本地
+     *
+     * @param file
+     * @return 返回操作结果，封装在Result对象中。
+     */
+    @PostMapping("/upload")
+    public Result upload(@RequestParam("file") MultipartFile file) {
+        return dataService.upload(file);
+    }
 
     /**
      * 根据识别日期搜索语音文件记录。

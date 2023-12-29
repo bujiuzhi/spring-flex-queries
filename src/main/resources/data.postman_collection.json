@@ -1,204 +1,234 @@
 {
-  "info": {
-    "_postman_id": "b6209618-fa79-4dcd-9456-7832f2ecf230",
-    "name": "data",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "31082839"
-  },
-  "item": [
-    {
-      "name": "searchVoiceRecords",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8080/data/searchVoiceRecords?startDate=2023-12-01&endDate=2023-12-20&pageNumber=2&pageSize=1",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "data",
-            "searchVoiceRecords"
-          ],
-          "query": [
-            {
-              "key": "startDate",
-              "value": "2023-12-01"
-            },
-            {
-              "key": "endDate",
-              "value": "2023-12-20"
-            },
-            {
-              "key": "pageNumber",
-              "value": "2"
-            },
-            {
-              "key": "pageSize",
-              "value": "1"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "saveVoiceRecord",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8080/data/saveVoiceRecord?filePath=/test",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "data",
-            "saveVoiceRecord"
-          ],
-          "query": [
-            {
-              "key": "filePath",
-              "value": "/test"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "searchCorporaRecords",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8080/data/searchCorporaRecords?endDate=2023-12-20",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "data",
-            "searchCorporaRecords"
-          ],
-          "query": [
-            {
-              "key": "startDate",
-              "value": "2023-12-01",
-              "disabled": true
-            },
-            {
-              "key": "endDate",
-              "value": "2023-12-20"
-            },
-            {
-              "key": "creator",
-              "value": "创建者A",
-              "disabled": true
-            },
-            {
-              "key": "pageNumber",
-              "value": "1",
-              "disabled": true
-            },
-            {
-              "key": "pageSize",
-              "value": "10",
-              "disabled": true
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "saveCorpora",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"name\": \"新语料\",\n    \"type\": \"新类型\",\n    \"annotation\": \"注释\",\n    \"creator\": \"张三\",\n    \"createTime\": \"2023-12-25 00:00:00\",\n    \"updater\": \"张三\",\n    \"updateTime\": \"2023-12-25 00:00:00\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8080/data/saveCorpora",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "data",
-            "saveCorpora"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "updateCorpora",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"id\": \"2\",\n    \"name\": \"新语料\",\n    \"type\": \"新类型\",\n    \"annotation\": \"注释\",\n    \"creator\": \"张三\",\n    \"createTime\": \"2023-12-25 00:00:00\",\n    \"updater\": \"张三\",\n    \"updateTime\": \"2023-12-25 00:00:00\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8080/data/updateCorpora",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "data",
-            "updateCorpora"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "deleteCorpora",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8080/data/deleteCorpora?id=1",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "data",
-            "deleteCorpora"
-          ],
-          "query": [
-            {
-              "key": "id",
-              "value": "1"
-            }
-          ]
-        }
-      },
-      "response": []
-    }
-  ]
+	"info": {
+		"_postman_id": "b6209618-fa79-4dcd-9456-7832f2ecf230",
+		"name": "data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31082839"
+	},
+	"item": [
+		{
+			"name": "upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/data/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchVoiceRecords",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/data/searchVoiceRecords?startDate=2023-12-01&endDate=2023-12-20&pageNumber=2&pageSize=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"searchVoiceRecords"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2023-12-01"
+						},
+						{
+							"key": "endDate",
+							"value": "2023-12-20"
+						},
+						{
+							"key": "pageNumber",
+							"value": "2"
+						},
+						{
+							"key": "pageSize",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "saveVoiceRecord",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/data/saveVoiceRecord?filePath=/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"saveVoiceRecord"
+					],
+					"query": [
+						{
+							"key": "filePath",
+							"value": "/test"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchCorporaRecords",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/data/searchCorporaRecords?endDate=2023-12-20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"searchCorporaRecords"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2023-12-01",
+							"disabled": true
+						},
+						{
+							"key": "endDate",
+							"value": "2023-12-20"
+						},
+						{
+							"key": "creator",
+							"value": "创建者A",
+							"disabled": true
+						},
+						{
+							"key": "pageNumber",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "pageSize",
+							"value": "10",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "saveCorpora",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"新语料\",\n    \"type\": \"新类型\",\n    \"annotation\": \"注释\",\n    \"creator\": \"张三\",\n    \"createTime\": \"2023-12-25 00:00:00\",\n    \"updater\": \"张三\",\n    \"updateTime\": \"2023-12-25 00:00:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/data/saveCorpora",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"saveCorpora"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateCorpora",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"2\",\n    \"name\": \"新语料\",\n    \"type\": \"新类型\",\n    \"annotation\": \"注释\",\n    \"creator\": \"张三\",\n    \"createTime\": \"2023-12-25 00:00:00\",\n    \"updater\": \"张三\",\n    \"updateTime\": \"2023-12-25 00:00:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/data/updateCorpora",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"updateCorpora"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteCorpora",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/data/deleteCorpora?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"deleteCorpora"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
 }

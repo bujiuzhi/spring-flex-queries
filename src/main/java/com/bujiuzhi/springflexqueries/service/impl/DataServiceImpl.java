@@ -8,7 +8,12 @@ import com.bujiuzhi.springflexqueries.service.DataService;
 import com.bujiuzhi.springflexqueries.utils.IatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,6 +29,44 @@ public class DataServiceImpl implements DataService {
 
     @Autowired
     private DataMapper dataMapper;
+
+    /**
+     * 文件上传，保存在本地
+     *
+     * @param file
+     * @return 操作结果
+     */
+    @Override
+    public Result upload(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return Result.error("上传失败，文件为空");
+        }
+
+        // 指定保存文件的路径
+        String directory = "/Users/bujiu/Downloads/voice";
+        Path path = Paths.get(directory);
+
+        try {
+            // 确保目录存在
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+
+            // 构造文件的完整路径
+            Path filePath = path.resolve(file.getOriginalFilename());
+
+            // 保存文件到本地
+            file.transferTo(filePath.toFile());
+
+            // 调用语音识别接口saveVoiceRecord，识别语音文件
+            saveVoiceRecord(filePath.toString());
+
+            return Result.success("上传成功，且已进行语音识别");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Result.error("上传失败，发生异常：" + e.getMessage());
+        }
+    }
 
     /**
      * 根据识别日期搜索语音文件记录。
