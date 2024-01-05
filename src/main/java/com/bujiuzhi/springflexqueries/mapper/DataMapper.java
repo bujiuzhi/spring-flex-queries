@@ -36,14 +36,36 @@ public interface DataMapper {
     int countVoiceRecords(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
     /**
-     * 插入语音文件记录。
-     *
+     * 插入语音文件记录
      * @param stgVoiceRecognition 语音文件记录对象
-     * @return 返回插入的记录数
      */
     @InsertProvider(type = DataSqlProvider.class, method = "insertVoiceRecord")
-    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    int insertVoiceRecord(StgVoiceRecognition stgVoiceRecognition);
+    void insertVoiceRecord(StgVoiceRecognition stgVoiceRecognition);
+
+    /**
+     * 根据ID查找语音文件记录
+     *
+     * @param id 语音文件记录的ID
+     * @return 语音文件记录
+     */
+    @SelectProvider(type = DataSqlProvider.class, method = "findVoiceRecordById")
+    StgVoiceRecognition findVoiceRecordById(@Param("id") String id);
+
+    /**
+     * 更新语音文件记录
+     *
+     * @param stgVoiceRecognition 更新后的语音文件记录对象
+     */
+    @UpdateProvider(type = DataSqlProvider.class, method = "updateVoiceRecord")
+    void updateVoiceRecord(StgVoiceRecognition stgVoiceRecognition);
+
+    /**
+     * 删除指定的语音文件记录
+     *
+     * @param id 语音文件记录的ID
+     */
+    @DeleteProvider(type = DataSqlProvider.class, method = "deleteVoiceRecord")
+    void deleteVoiceRecord(@Param("id") String id);
 
     /**
      * 计算符合条件的语料库记录总数。
@@ -75,7 +97,6 @@ public interface DataMapper {
      * @return 返回插入的记录数
      */
     @InsertProvider(type = DataSqlProvider.class, method = "insertCorpora")
-    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insertCorpora(StgCorpora stgCorpora);
 
     /**

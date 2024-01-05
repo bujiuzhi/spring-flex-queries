@@ -15,11 +15,18 @@ public class StgVoiceRecognition {
 
     private String id; // 主键ID
 
+    private String fileName; // 文件名称
+
     @NotBlank(message = "文件名称路径不能为空")
-    private String filePath; // 文件名称
+    private String filePath; // 文件路径
+
+    private String commonParams; // 常用参数
 
     private String fileSize; // 文件大小
     private String duration; // 文件时长
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String recognitionTime; // 识别时间
 
     private String content; // 识别内容
 

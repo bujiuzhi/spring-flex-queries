@@ -7,36 +7,6 @@
 	},
 	"item": [
 		{
-			"name": "upload",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": []
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8080/data/upload",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"data",
-						"upload"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "searchVoiceRecords",
 			"request": {
 				"method": "POST",
@@ -75,7 +45,115 @@
 			"response": []
 		},
 		{
+			"name": "uploadVoice",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/data/uploadVoice",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"uploadVoice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "saveVoiceRecord",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/data/saveVoiceRecord?filePath=/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"saveVoiceRecord"
+					],
+					"query": [
+						{
+							"key": "filePath",
+							"value": "/test"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteVoiceRecord",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/data/saveVoiceRecord?filePath=/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"saveVoiceRecord"
+					],
+					"query": [
+						{
+							"key": "filePath",
+							"value": "/test"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateVoiceRecord",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/data/saveVoiceRecord?filePath=/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"saveVoiceRecord"
+					],
+					"query": [
+						{
+							"key": "filePath",
+							"value": "/test"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recognizeVoice",
 			"request": {
 				"method": "POST",
 				"header": [],

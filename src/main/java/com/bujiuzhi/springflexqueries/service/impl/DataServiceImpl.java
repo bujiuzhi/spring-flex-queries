@@ -5,14 +5,15 @@ import com.bujiuzhi.springflexqueries.pojo.Result;
 import com.bujiuzhi.springflexqueries.pojo.StgCorpora;
 import com.bujiuzhi.springflexqueries.pojo.StgVoiceRecognition;
 import com.bujiuzhi.springflexqueries.service.DataService;
+import com.bujiuzhi.springflexqueries.utils.AudioConvert;
 import com.bujiuzhi.springflexqueries.utils.IatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,44 +30,6 @@ public class DataServiceImpl implements DataService {
 
     @Autowired
     private DataMapper dataMapper;
-
-    /**
-     * 文件上传，保存在本地
-     *
-     * @param file
-     * @return 操作结果
-     */
-    @Override
-    public Result upload(MultipartFile file) {
-        if (file == null || file.isEmpty()) {
-            return Result.error("上传失败，文件为空");
-        }
-
-        // 指定保存文件的路径
-        String directory = "/Users/bujiu/Downloads/voice";
-        Path path = Paths.get(directory);
-
-        try {
-            // 确保目录存在
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
-            }
-
-            // 构造文件的完整路径
-            Path filePath = path.resolve(file.getOriginalFilename());
-
-            // 保存文件到本地
-            file.transferTo(filePath.toFile());
-
-            // 调用语音识别接口saveVoiceRecord，识别语音文件
-            saveVoiceRecord(filePath.toString());
-
-            return Result.success("上传成功，且已进行语音识别");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Result.error("上传失败，发生异常：" + e.getMessage());
-        }
-    }
 
     /**
      * 根据识别日期搜索语音文件记录。
@@ -101,34 +64,166 @@ public class DataServiceImpl implements DataService {
     }
 
     /**
-     * 新增语音文件记录
+     * 上传语音文件
      *
-     * @param filePath 语音文件路径
-     * @return 操作结果(识别出该文件的信息)
+     * @param file 上传的MultipartFile文件
+     * @return 操作结果
      */
     @Override
-    public Result saveVoiceRecord(String filePath) {
-//        //先进行参数二次验证，防止validation不生效
-//        if (filePath == null || filePath.isEmpty()) {
+    public Result uploadVoice(MultipartFile file) {
+        if (file.isEmpty()) {
+            return Result.error("上传失败，文件为空");
+        }
+
+        try {
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+            String targetDirectory = fileExtension.equals("mp3") ? "/Users/bujiu/Downloads/audio/mp3" : "/Users/bujiu/Downloads/audio/wav";
+
+            File targetFolder = new File(targetDirectory);
+            if (!targetFolder.exists() && !targetFolder.mkdirs()) {
+                throw new IOException("创建目标文件夹失败：" + targetDirectory);
+            }
+
+            File sourceFile = new File(targetFolder, originalFilename);
+            file.transferTo(sourceFile);
+
+            // 检查文件类型并转换
+            File processedFile = fileExtension.equals("mp3")
+                    ? AudioConvert.convertToWav(sourceFile)
+                    : sourceFile;
+
+            // 获取文件信息
+            Map<String, String> fileInfo = AudioConvert.getAudioFileInfo(processedFile.getAbsolutePath());
+
+            // 创建语音文件记录
+            StgVoiceRecognition record = new StgVoiceRecognition();
+            record.setId(generateId());
+            record.setFileName(processedFile.getName());
+            record.setFilePath(processedFile.getAbsolutePath());
+            record.setFileSize(fileInfo.get("FileSize"));
+            record.setDuration(fileInfo.get("Duration"));
+            record.setCommonParams(fileInfo.get("CommonParams"));
+            record.setContent("未识别");
+            // ... 其他字段设置
+            record.setCreator("admin");
+            record.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
+            dataMapper.insertVoiceRecord(record);
+            return Result.success("文件上传成功");
+        } catch (IOException e) {
+            return Result.error("上传失败：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 保存语音文件记录
+     *
+     * @param record 语音识别记录对象
+     * @return 操作结果
+     */
+    @Override
+    public Result saveVoiceRecord(StgVoiceRecognition record) {
+        //先进行参数二次验证，防止validation不生效
+//        if (record.getFilePath() == null) {
 //            return Result.error("文件路径不能为空");
 //        }
+        dataMapper.insertVoiceRecord(record);
+        return Result.success("记录保存成功");
+    }
 
-        //调用语音识别接口，识别语音文件，接受返回的stgVoiceRecognition对象
-        StgVoiceRecognition stgVoiceRecognition = IatUtil.start(filePath);
+    /**
+     * 删除语音文件记录
+     *
+     * @param id 语音记录的唯一标识
+     * @return 操作结果
+     */
+    @Override
+    public Result deleteVoiceRecord(String id) {
+        //先进行参数二次验证，防止validation不生效
+//        if (id == null || id.isEmpty()) {
+//            return Result.error("主键ID不能为空");
+//        }
+        // 从数据库中获取记录，以便知道要删除的文件路径
+        StgVoiceRecognition record = dataMapper.findVoiceRecordById(id);
+        if (record != null) {
+            try {
+                // 删除文件
+                Files.deleteIfExists(Paths.get(record.getFilePath()));
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentTime = dateFormat.format(new Date());
-        stgVoiceRecognition.setCreateTime(currentTime); // 设置当前时间为创建时间
-        stgVoiceRecognition.setUpdateTime(currentTime); // 设置当前时间为更新时间
-        // 假设creator和updater是固定的或者从上下文中获取
-        stgVoiceRecognition.setCreator("admin");
-        stgVoiceRecognition.setUpdater("admin");
-
-        int i = dataMapper.insertVoiceRecord(stgVoiceRecognition);
-        if (i == 0) {
-            return Result.error("新增失败");
+                // 删除数据库记录
+                dataMapper.deleteVoiceRecord(id);
+                return Result.success("记录删除成功");
+            } catch (IOException e) {
+                return Result.error("文件删除失败：" + e.getMessage());
+            }
         }
-        return Result.success("新增成功");
+        return Result.error("未找到指定ID的记录");
+    }
+
+    /**
+     * 更新语音文件记录
+     *
+     * @param record 更新后的语音识别记录对象
+     * @return 操作结果
+     */
+    @Override
+    public Result updateVoiceRecord(StgVoiceRecognition record) {
+        //先进行参数二次验证，防止validation不生效
+//        if (record.getId() == null) {
+//            return Result.error("主键ID不能为空");
+//        }
+        dataMapper.updateVoiceRecord(record);
+        return Result.success("记录更新成功");
+    }
+
+    /**
+     * 进行语音识别
+     *
+     * @param id 语音记录的唯一标识
+     * @return 操作结果
+     */
+    @Override
+    public Result recognizeVoice(String id) {
+        //先进行参数二次验证，防止validation不生效
+//        if (id == null || id.isEmpty()) {
+//            return Result.error("主键ID不能为空");
+//        }
+        StgVoiceRecognition record = dataMapper.findVoiceRecordById(id);
+        if (record != null && "未识别".equals(record.getContent())) {
+            String recognitionResult = IatUtil.start(record.getFilePath());
+            record.setContent(recognitionResult);
+            record.setRecognitionTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            record.setUpdater("admin");
+            record.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            dataMapper.updateVoiceRecord(record);
+            return Result.success("语音识别完成，内容已更新,识别结果为：" + recognitionResult);
+        }
+        return Result.error("找不到指定的记录或记录已识别");
+    }
+
+    /**
+     * 将MultipartFile转换为File
+     *
+     * @param multipartFile MultipartFile文件
+     * @param filename      文件名
+     * @return 转换后的File对象
+     * @throws IOException
+     */
+    private File convertToFile(MultipartFile multipartFile, String filename) throws IOException {
+        File file = new File(System.getProperty("java.io.tmpdir") + "/" + filename);
+        multipartFile.transferTo(file);
+        return file;
+    }
+
+    /**
+     * 生成语音文件记录的唯一标识
+     *
+     * @return 唯一标识
+     */
+    private String generateId() {
+        // 根据具体逻辑生成ID
+        return String.valueOf(System.currentTimeMillis());
     }
 
     /**
@@ -177,6 +272,7 @@ public class DataServiceImpl implements DataService {
 //            return Result.error("语料名称不能为空");
 //        }
 
+        stgCorpora.setId(generateId()); // 生成唯一标识
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = dateFormat.format(new Date());
 

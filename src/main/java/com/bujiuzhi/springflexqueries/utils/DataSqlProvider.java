@@ -4,6 +4,7 @@ import com.bujiuzhi.springflexqueries.pojo.StgCorpora;
 import com.bujiuzhi.springflexqueries.pojo.StgVoiceRecognition;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,26 +66,71 @@ public class DataSqlProvider {
 
     /**
      * 插入语音文件记录
-     *
-     * @param stgVoiceRecognition
+     * @param record
      * @return 返回SQL插入语句。
      */
-    public String insertVoiceRecord(StgVoiceRecognition stgVoiceRecognition) {
-        SQL sql = new SQL();
-        sql.INSERT_INTO("test.stg_voice_recognition");
-        Arrays.stream(StgVoiceRecognition.class.getDeclaredFields()).forEach(field -> {
-            field.setAccessible(true);
-            try {
-                Object value = field.get(stgVoiceRecognition);
-                if (value != null) {
-                    String columnName = convertCamelCaseToUnderscore(field.getName());
-                    sql.VALUES(columnName, "#{" + field.getName() + "}");
+    public String insertVoiceRecord(StgVoiceRecognition record) {
+        return new SQL() {{
+            INSERT_INTO("test.stg_voice_recognition");
+            for (Field field : StgVoiceRecognition.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                try {
+                    if (field.get(record) != null) {
+                        VALUES(convertCamelCaseToUnderscore(field.getName()), "#{" + field.getName() + "}");
+                    }
+                } catch (IllegalAccessException ignored) {
                 }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
             }
-        });
-        return sql.toString();
+        }}.toString();
+    }
+
+    /**
+     * 根据ID查询语音文件记录
+     *
+     * @param id
+     * @return 返回SQL查询语句。
+     */
+    public String findVoiceRecordById(final String id) {
+        return new SQL() {{
+            SELECT("*");
+            FROM("test.stg_voice_recognition");
+            WHERE("id = #{id}");
+        }}.toString();
+    }
+
+    /**
+     * 更新语音文件记录
+     *
+     * @param record
+     * @return 返回SQL更新语句。
+     */
+    public String updateVoiceRecord(StgVoiceRecognition record) {
+        return new SQL() {{
+            UPDATE("test.stg_voice_recognition");
+            for (Field field : StgVoiceRecognition.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                try {
+                    if (field.get(record) != null && !"id".equals(field.getName())) {
+                        SET(convertCamelCaseToUnderscore(field.getName()) + " = #{" + field.getName() + "}");
+                    }
+                } catch (IllegalAccessException ignored) {
+                }
+            }
+            WHERE("id = #{id}");
+        }}.toString();
+    }
+
+    /**
+     * 删除语音文件记录
+     *
+     * @param id
+     * @return 返回SQL删除语句。
+     */
+    public String deleteVoiceRecord(final String id) {
+        return new SQL() {{
+            DELETE_FROM("test.stg_voice_recognition");
+            WHERE("id = #{id}");
+        }}.toString();
     }
 
     /**

@@ -2,6 +2,7 @@ package com.bujiuzhi.springflexqueries.service;
 
 import com.bujiuzhi.springflexqueries.pojo.Result;
 import com.bujiuzhi.springflexqueries.pojo.StgCorpora;
+import com.bujiuzhi.springflexqueries.pojo.StgVoiceRecognition;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -9,15 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
  * 用于处理语音文件记录和语料库记录的业务逻辑。
  */
 public interface DataService {
-
-    /**
-     * 文件上传，保存在本地
-     *
-     * @param file 上传的文件
-     * @return 操作结果
-     */
-    Result upload(MultipartFile file);
-
     /**
      * 根据识别日期搜索语音文件记录。
      *
@@ -30,12 +22,41 @@ public interface DataService {
     Result searchVoiceRecords(String startDate, String endDate, int pageNumber, int pageSize);
 
     /**
-     * 新增语音文件记录
-     *
-     * @param filePath 语音文件路径
-     * @return 操作结果(识别出该文件的信息)
+     * 上传语音文件
+     * @param file 上传的MultipartFile文件
+     * @return 操作结果
      */
-    Result saveVoiceRecord(String filePath);
+    Result uploadVoice(MultipartFile file);
+
+    /**
+     * 保存语音文件记录
+     *
+     * @param stgVoiceRecognition 语音识别记录对象
+     * @return 操作结果
+     */
+    Result saveVoiceRecord(StgVoiceRecognition stgVoiceRecognition);
+
+    /**
+     * 删除语音文件记录
+     *
+     * @param id 语音记录的唯一标识
+     * @return 操作结果
+     */
+    Result deleteVoiceRecord(String id);
+
+    /**
+     * 更新语音文件记录
+     * @param stgVoiceRecognition 更新后的语音识别记录对象
+     * @return 操作结果
+     */
+    Result updateVoiceRecord(StgVoiceRecognition stgVoiceRecognition);
+
+    /**
+     * 进行语音识别
+     * @param id 语音记录的唯一标识
+     * @return 操作结果
+     */
+    Result recognizeVoice(String id);
 
     /**
      * 根据上传日期和上传人搜索语料库记录。
