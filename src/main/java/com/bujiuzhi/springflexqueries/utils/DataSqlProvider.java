@@ -5,7 +5,10 @@ import com.bujiuzhi.springflexqueries.pojo.StgVoiceRecognition;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -13,52 +16,43 @@ import java.util.stream.Collectors;
  */
 public class DataSqlProvider {
 
+
     /**
      * 动态构建SQL查询语句，用于搜索符合条件的语音文件记录。
      *
-     * @param startDate
-     * @param endDate
-     * @param pageNumber
-     * @param pageSize
+     * @param params 包含所有搜索条件的Map
      * @return 返回SQL查询语句。
      */
-    public String searchVoiceRecords(String startDate, String endDate, int pageNumber, int pageSize) {
-        // 构建和封装搜索条件Map
-        Map<String, Object> conditions = new HashMap<>();
-        conditions.put("startDate", startDate);
-        conditions.put("endDate", endDate);
-
+    public String searchVoiceRecords(Map<String, Object> params) {
         SQL sql = new SQL();
         sql.SELECT(generateSelectFieldsWithAliases(StgVoiceRecognition.class)).FROM("test.stg_voice_recognition");
 
         // 动态生成WHERE子句
-        List<String> whereConditions = generateSqlConditions(conditions);
+        List<String> whereConditions = generateSqlConditions(params);
         whereConditions.forEach(sql::WHERE);
 
-        String finalSql = sql.toString();
         // 添加分页逻辑
-        finalSql += " LIMIT " + pageSize + " OFFSET " + (pageNumber - 1) * pageSize;
-        return finalSql;
+        if (params.containsKey("pageNumber") && params.containsKey("pageSize")) {
+            int pageNumber = (Integer) params.get("pageNumber");
+            int pageSize = (Integer) params.get("pageSize");
+            sql.LIMIT(pageSize).OFFSET((pageNumber - 1) * pageSize);
+        }
+
+        return sql.toString();
     }
 
     /**
      * 动态构建SQL查询语句，用于计算符合条件的语音文件记录总数。
      *
-     * @param startDate 开始日期
-     * @param endDate   结束日期
+     * @param params 包含所有搜索条件的Map
      * @return 返回SQL查询语句。
      */
-    public String countVoiceRecords(String startDate, String endDate) {
-        // 构建和封装搜索条件Map
-        Map<String, Object> conditions = new HashMap<>();
-        conditions.put("startDate", startDate);
-        conditions.put("endDate", endDate);
-
+    public String countVoiceRecords(Map<String, Object> params) {
         SQL sql = new SQL();
         sql.SELECT("COUNT(*)").FROM("test.stg_voice_recognition");
 
         // 动态生成WHERE子句
-        List<String> whereConditions = generateSqlConditions(conditions);
+        List<String> whereConditions = generateSqlConditions(params);
         whereConditions.forEach(sql::WHERE);
 
         return sql.toString();
@@ -66,6 +60,7 @@ public class DataSqlProvider {
 
     /**
      * 插入语音文件记录
+     *
      * @param record
      * @return 返回SQL插入语句。
      */
@@ -92,7 +87,7 @@ public class DataSqlProvider {
      */
     public String findVoiceRecordById(final String id) {
         return new SQL() {{
-            SELECT("*");
+            SELECT(generateSelectFieldsWithAliases(StgVoiceRecognition.class));
             FROM("test.stg_voice_recognition");
             WHERE("id = #{id}");
         }}.toString();
@@ -136,53 +131,39 @@ public class DataSqlProvider {
     /**
      * 动态构建SQL查询语句，用于搜索符合条件的语料库记录。
      *
-     * @param startDate
-     * @param endDate
-     * @param creator
-     * @param pageNumber
-     * @param pageSize
+     * @param params 包含所有搜索条件的Map
      * @return 返回SQL查询语句。
      */
-    public String searchCorporaRecords(String startDate, String endDate, String creator, int pageNumber, int pageSize) {
-        // 构建和封装搜索条件Map
-        Map<String, Object> conditions = new HashMap<>();
-        conditions.put("startDate", startDate);
-        conditions.put("endDate", endDate);
-        conditions.put("creator", creator);
-
+    public String searchCorporaRecords(Map<String, Object> params) {
         SQL sql = new SQL();
         sql.SELECT(generateSelectFieldsWithAliases(StgCorpora.class)).FROM("test.stg_corpora");
 
         // 动态生成WHERE子句
-        List<String> whereConditions = generateSqlConditions(conditions);
+        List<String> whereConditions = generateSqlConditions(params);
         whereConditions.forEach(sql::WHERE);
 
-        String finalSql = sql.toString();
         // 添加分页逻辑
-        finalSql += " LIMIT " + pageSize + " OFFSET " + (pageNumber - 1) * pageSize;
-        return finalSql;
+        if (params.containsKey("pageNumber") && params.containsKey("pageSize")) {
+            int pageNumber = (Integer) params.get("pageNumber");
+            int pageSize = (Integer) params.get("pageSize");
+            sql.LIMIT(pageSize).OFFSET((pageNumber - 1) * pageSize);
+        }
+
+        return sql.toString();
     }
 
     /**
      * 动态构建SQL查询语句，用于计算符合条件的语料库记录总数。
      *
-     * @param startDate 开始日期
-     * @param endDate   结束日期
-     * @param creator   上传人
+     * @param params 包含所有搜索条件的Map
      * @return 返回SQL查询语句。
      */
-    public String countCorporaRecords(String startDate, String endDate, String creator) {
-        // 构建和封装搜索条件Map
-        Map<String, Object> conditions = new HashMap<>();
-        conditions.put("startDate", startDate);
-        conditions.put("endDate", endDate);
-        conditions.put("creator", creator);
-
+    public String countCorporaRecords(Map<String, Object> params) {
         SQL sql = new SQL();
         sql.SELECT("COUNT(*)").FROM("test.stg_corpora");
 
         // 动态生成WHERE子句
-        List<String> whereConditions = generateSqlConditions(conditions);
+        List<String> whereConditions = generateSqlConditions(params);
         whereConditions.forEach(sql::WHERE);
 
         return sql.toString();
@@ -240,34 +221,57 @@ public class DataSqlProvider {
     }
 
     /**
-     * 动态生成SQL查询语句的辅助方法
+     * 动态构建SQL查询语句，用于搜索符合条件的记录。
      *
-     * @param conditions
-     * @return 返回SQL查询语句。
+     * @param params
+     * @return
      */
-    private List<String> generateSqlConditions(Map<String, Object> conditions) {
+    private List<String> generateSqlConditions(Map<String, Object> params) {
         List<String> sqlConditions = new ArrayList<>();
 
-        for (Map.Entry<String, Object> entry : conditions.entrySet()) {
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
 
-            if (value != null && !value.toString().isEmpty()) {
-                String columnName = convertCamelCaseToUnderscore(key);
+            // 跳过 pageNumber 和 pageSize
+            if ("pageNumber".equals(key) || "pageSize".equals(key)) {
+                continue;
+            }
 
-                // 特殊处理startDate和endDate条件，它们都与createTime字段比较
-                if ("startDate".equals(key) || "endDate".equals(key)) {
-                    String operator = "startDate".equals(key) ? " >= '" : " <= '";
-                    sqlConditions.add("create_time" + operator + value.toString().replace("'", "''") + "'");
+            if (value != null && !value.toString().isEmpty()) {
+                String columnName;
+                String condition;
+
+                // 特殊处理时间列
+                if (key.startsWith("start") || key.startsWith("end")) {
+                    columnName = getDatabaseFieldNameForKey(key);
+                    String operator = key.startsWith("start") ? " >= " : " <= ";
+                    condition = columnName + operator + "'" + value + "'";
                 } else {
-                    sqlConditions.add(columnName + " = '" + value.toString().replace("'", "''") + "'");
+                    // 对于其他类型的字段，使用 LIKE 查询
+                    columnName = convertCamelCaseToUnderscore(key);
+                    condition = columnName + " LIKE CONCAT('%', '" + value + "', '%')";
                 }
+
+                sqlConditions.add(condition);
             }
         }
 
         return sqlConditions;
     }
 
+    /**
+     * 根据参数名获取数据库字段名
+     *
+     * @param key 参数名
+     * @return 数据库字段名
+     */
+    private String getDatabaseFieldNameForKey(String key) {
+        if (key.startsWith("start") || key.startsWith("end")) {
+            return convertCamelCaseToUnderscore(key.replace("start", "").replace("end", ""));
+        }
+        return key; // 默认返回原始键名
+    }
 
     /**
      * 将驼峰命名法转换为下划线命名法

@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,22 +33,43 @@ public class DataServiceImpl implements DataService {
     private DataMapper dataMapper;
 
     /**
-     * 根据识别日期搜索语音文件记录。
+     * 根据多个时间范围和其他条件搜索语音文件记录。
      *
-     * @param startDate  开始日期
-     * @param endDate    结束日期
-     * @param pageNumber 页码
-     * @param pageSize   页大小
-     * @return 操作结果，包含分页的语音文件记录
+     * @param startRecognitionTime 识别开始时间
+     * @param endRecognitionTime   识别结束时间
+     * @param startCreateTime      创建开始时间
+     * @param endCreateTime        创建结束时间
+     * @param fileName             文件名称
+     * @param creator              创建者
+     * @param updater              更新者
+     * @param pageNumber           页码
+     * @param pageSize             页数
+     * @return 操作结果
      */
     @Override
-    public Result searchVoiceRecords(String startDate, String endDate, int pageNumber, int pageSize) {
-        List<StgVoiceRecognition> records = dataMapper.searchVoiceRecords(startDate, endDate, pageNumber, pageSize);
+    public Result searchVoiceRecords(String startRecognitionTime, String endRecognitionTime,
+                                     String startCreateTime, String endCreateTime,
+                                     String fileName, String creator, String updater,
+                                     int pageNumber, int pageSize) {
+        // 创建一个map来传递所有的搜索参数
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("startRecognitionTime", startRecognitionTime);
+        searchParams.put("endRecognitionTime", endRecognitionTime);
+        searchParams.put("startCreateTime", startCreateTime);
+        searchParams.put("endCreateTime", endCreateTime);
+        searchParams.put("fileName", fileName);
+        searchParams.put("creator", creator);
+        searchParams.put("updater", updater);
+        searchParams.put("pageNumber", pageNumber);
+        searchParams.put("pageSize", pageSize);
+
+        // 从mapper调用搜索方法
+        List<StgVoiceRecognition> records = dataMapper.searchVoiceRecords(searchParams);
         if (records.isEmpty()) {
             return Result.error("没有找到符合条件的语音文件记录");
         }
 
-        int totalRecords = dataMapper.countVoiceRecords(startDate, endDate);
+        int totalRecords = dataMapper.countVoiceRecords(searchParams);
         int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
 
         Map<String, Object> paginationInfo = new HashMap<>();
@@ -78,29 +100,36 @@ public class DataServiceImpl implements DataService {
         try {
             String originalFilename = file.getOriginalFilename();
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
-            String targetDirectory = fileExtension.equals("mp3") ? "/Users/bujiu/Downloads/audio/mp3" : "/Users/bujiu/Downloads/audio/wav";
+            String mp3Directory = "/Users/bujiu/Downloads/audio/mp3";
+            String wavDirectory = "/Users/bujiu/Downloads/audio/wav";
 
-            File targetFolder = new File(targetDirectory);
-            if (!targetFolder.exists() && !targetFolder.mkdirs()) {
-                throw new IOException("创建目标文件夹失败：" + targetDirectory);
+            File mp3Folder = new File(mp3Directory);
+            File wavFolder = new File(wavDirectory);
+
+            if ((!mp3Folder.exists() && !mp3Folder.mkdirs()) || (!wavFolder.exists() && !wavFolder.mkdirs())) {
+                throw new IOException("创建目标文件夹失败");
             }
 
-            File sourceFile = new File(targetFolder, originalFilename);
+            // 将上传的文件保存到指定目录
+            File sourceFile = new File(mp3Folder, originalFilename);
             file.transferTo(sourceFile);
 
-            // 检查文件类型并转换
-            File processedFile = fileExtension.equals("mp3")
-                    ? AudioConvert.convertToWav(sourceFile)
-                    : sourceFile;
+            String filePaths = sourceFile.getAbsolutePath();
+
+            // 如果是MP3文件，转换为WAV格式并拼接路径
+            if (fileExtension.equals("mp3")) {
+                File processedFile = AudioConvert.convertToWav(sourceFile);
+                filePaths += ";" + processedFile.getAbsolutePath(); // 使用分号分隔两个路径
+            }
 
             // 获取文件信息
-            Map<String, String> fileInfo = AudioConvert.getAudioFileInfo(processedFile.getAbsolutePath());
+            Map<String, String> fileInfo = AudioConvert.getAudioFileInfo(filePaths.split(";")[0]); // 使用第一个路径获取文件信息
 
             // 创建语音文件记录
             StgVoiceRecognition record = new StgVoiceRecognition();
             record.setId(generateId());
-            record.setFileName(processedFile.getName());
-            record.setFilePath(processedFile.getAbsolutePath());
+            record.setFileName(originalFilename.substring(0, originalFilename.lastIndexOf(".")));
+            record.setFilePath(filePaths); // 存储拼接的路径
             record.setFileSize(fileInfo.get("FileSize"));
             record.setDuration(fileInfo.get("Duration"));
             record.setCommonParams(fileInfo.get("CommonParams"));
@@ -115,6 +144,40 @@ public class DataServiceImpl implements DataService {
             return Result.error("上传失败：" + e.getMessage());
         }
     }
+
+    /**
+     * 根据文件路径删除语音文件及其数据库记录。
+     *
+     * @param filePath 要删除的文件路径
+     * @return 操作结果
+     */
+    @Override
+    public Result deleteVoice(String filePath) {
+        try {
+            // 删除相关文件
+            Path fileToDelete = Paths.get(filePath);
+            if (Files.exists(fileToDelete)) {
+                Files.delete(fileToDelete);
+            }
+            //若以.mp3结尾还需删除.wav文件
+            if (filePath.endsWith(".mp3")) {
+                String wavFilePath = filePath.replace("mp3", "wav");
+                Path wavFileToDelete = Paths.get(wavFilePath);
+                if (Files.exists(wavFileToDelete)) {
+                    Files.delete(wavFileToDelete);
+                }
+            }
+
+            // 删除数据库中包含这个路径的所有记录
+            // 注意：这里假设filePath是完整的文件名，包括扩展名
+            dataMapper.deleteVoiceRecordByFilePath(filePath);
+
+            return Result.success("语音文件及其记录删除成功");
+        } catch (IOException e) {
+            return Result.error("语音文件删除失败: " + e.getMessage());
+        }
+    }
+
 
     /**
      * 保存语音文件记录
@@ -226,24 +289,40 @@ public class DataServiceImpl implements DataService {
         return String.valueOf(System.currentTimeMillis());
     }
 
+
     /**
-     * 根据上传日期和上传人搜索语料库记录。
+     * 根据创建时间范围、名称、类型和更新者搜索语料库记录。
      *
-     * @param startDate  开始日期
-     * @param endDate    结束日期
-     * @param creator    上传人
-     * @param pageNumber 页码
-     * @param pageSize   页大小
-     * @return 操作结果，包含分页的语料库记录
+     * @param startCreateTime 创建开始时间
+     * @param endCreateTime   创建结束时间
+     * @param name            语料名称
+     * @param type            语料类型
+     * @param creator         创建者
+     * @param updater         更新者
+     * @param pageNumber      页码
+     * @param pageSize        页数
+     * @return 操作结果
      */
     @Override
-    public Result searchCorporaRecords(String startDate, String endDate, String creator, int pageNumber, int pageSize) {
-        List<StgCorpora> records = dataMapper.searchCorporaRecords(startDate, endDate, creator, pageNumber, pageSize);
+    public Result searchCorporaRecords(String startCreateTime, String endCreateTime,
+                                       String name, String type, String creator, String updater,
+                                       int pageNumber, int pageSize) {
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("startCreateTime", startCreateTime);
+        searchParams.put("endCreateTime", endCreateTime);
+        searchParams.put("name", name);
+        searchParams.put("type", type);
+        searchParams.put("creator", creator);
+        searchParams.put("updater", updater);
+        searchParams.put("pageNumber", pageNumber);
+        searchParams.put("pageSize", pageSize);
+
+        List<StgCorpora> records = dataMapper.searchCorporaRecords(searchParams);
         if (records.isEmpty()) {
             return Result.error("没有找到符合条件的语料库记录");
         }
 
-        int totalRecords = dataMapper.countCorporaRecords(startDate, endDate, creator);
+        int totalRecords = dataMapper.countCorporaRecords(searchParams);
         int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
 
         Map<String, Object> paginationInfo = new HashMap<>();

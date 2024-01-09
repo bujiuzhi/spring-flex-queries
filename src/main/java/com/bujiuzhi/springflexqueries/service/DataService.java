@@ -11,15 +11,23 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface DataService {
     /**
-     * 根据识别日期搜索语音文件记录。
+     * 根据多个时间范围和其他条件搜索语音文件记录。
      *
-     * @param startDate  开始日期
-     * @param endDate    结束日期
+     * @param startRecognitionTime 识别开始时间
+     * @param endRecognitionTime 识别结束时间
+     * @param startCreateTime 创建开始时间
+     * @param endCreateTime 创建结束时间
+     * @param fileName 文件名称
+     * @param creator 创建者
+     * @param updater 更新者
      * @param pageNumber 页码
-     * @param pageSize   页大小
-     * @return 操作结果，包含分页的语音文件记录
+     * @param pageSize 页数
+     * @return 操作结果
      */
-    Result searchVoiceRecords(String startDate, String endDate, int pageNumber, int pageSize);
+    Result searchVoiceRecords(String startRecognitionTime, String endRecognitionTime,
+                              String startCreateTime, String endCreateTime,
+                              String fileName, String creator, String updater,
+                              int pageNumber, int pageSize);
 
     /**
      * 上传语音文件
@@ -27,6 +35,14 @@ public interface DataService {
      * @return 操作结果
      */
     Result uploadVoice(MultipartFile file);
+
+    /**
+     * 删除指定路径的文件。
+     *
+     * @param filePath 要删除的文件路径
+     * @return 操作结果
+     */
+    Result deleteVoice(String filePath);
 
     /**
      * 保存语音文件记录
@@ -59,16 +75,21 @@ public interface DataService {
     Result recognizeVoice(String id);
 
     /**
-     * 根据上传日期和上传人搜索语料库记录。
+     * 根据创建时间范围、名称、类型和更新者搜索语料库记录。
      *
-     * @param startDate  开始日期
-     * @param endDate    结束日期
-     * @param creator    上传人
-     * @param pageNumber 页码
-     * @param pageSize   页大小
-     * @return 操作结果，包含分页的语料库记录
+     * @param startCreateTime 创建开始时间
+     * @param endCreateTime   创建结束时间
+     * @param name            语料名称
+     * @param type            语料类型
+     * @param creator         创建者
+     * @param updater         更新者
+     * @param pageNumber      页码
+     * @param pageSize        页数
+     * @return 操作结果
      */
-    Result searchCorporaRecords(String startDate, String endDate, String creator, int pageNumber, int pageSize);
+    public Result searchCorporaRecords(String startCreateTime, String endCreateTime,
+                                       String name, String type, String creator, String updater,
+                                       int pageNumber, int pageSize);
 
     /**
      * 新增语料库记录。

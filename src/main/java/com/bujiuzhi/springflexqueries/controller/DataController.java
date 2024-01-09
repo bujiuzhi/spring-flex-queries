@@ -24,26 +24,38 @@ public class DataController {
     private DataService dataService;
 
     /**
-     * 根据识别日期搜索语音文件记录。
+     * 根据多个时间范围和其他条件搜索语音文件记录。
+     * 可以根据识别时间、创建时间、文件名称、创建者和更新者等进行搜索。
      *
-     * @param startDate  开始日期
-     * @param endDate    结束日期
-     * @param pageNumber 页码
-     * @param pageSize   页数
+     * @param startRecognitionTime 识别开始时间
+     * @param endRecognitionTime   识别结束时间
+     * @param startCreateTime      创建开始时间
+     * @param endCreateTime        创建结束时间
+     * @param fileName             文件名称
+     * @param creator              创建者
+     * @param updater              更新者
+     * @param pageNumber           页码
+     * @param pageSize             页数
      * @return 返回操作结果，封装在Result对象中。
      */
     @PostMapping("/searchVoiceRecords")
-    public Result searchVoiceRecords(@RequestParam(required = false) String startDate,
-                                     @RequestParam(required = false) String endDate,
+    public Result searchVoiceRecords(@RequestParam(required = false) String startRecognitionTime,
+                                     @RequestParam(required = false) String endRecognitionTime,
+                                     @RequestParam(required = false) String startCreateTime,
+                                     @RequestParam(required = false) String endCreateTime,
+                                     @RequestParam(required = false) String fileName,
+                                     @RequestParam(required = false) String creator,
+                                     @RequestParam(required = false) String updater,
                                      @RequestParam(defaultValue = "1") int pageNumber,
                                      @RequestParam(defaultValue = "10") int pageSize) {
-        return dataService.searchVoiceRecords(startDate, endDate, pageNumber, pageSize);
+        return dataService.searchVoiceRecords(startRecognitionTime, endRecognitionTime, startCreateTime, endCreateTime, fileName, creator, updater, pageNumber, pageSize);
     }
 
     /**
      * 上传语音文件接口
      * 如果是mp3格式，将转换为wav格式
      * 文件名相同的情况下，新上传的文件将覆盖旧文件
+     *
      * @param file 上传的文件
      * @return 返回操作结果
      */
@@ -53,7 +65,19 @@ public class DataController {
     }
 
     /**
+     * 根据文件路径删除语音文件及其数据库记录。。
+     *
+     * @param filePath 要删除的文件路径
+     * @return 返回操作结果
+     */
+    @PostMapping("/deleteVoice")
+    public Result deleteVoice(@RequestParam("filePath") String filePath) {
+        return dataService.deleteVoice(filePath);
+    }
+
+    /**
      * 保存语音文件记录接口
+     *
      * @param stgVoiceRecognition 语音识别记录对象
      * @return 返回操作结果
      */
@@ -99,22 +123,28 @@ public class DataController {
 
 
     /**
-     * 根据上传日期和上传人搜索语料库记录。
+     * 根据创建时间范围、名称、类型和更新者搜索语料库记录。
      *
-     * @param startDate  开始日期
-     * @param endDate    结束日期
-     * @param creator    上传人
-     * @param pageNumber 页码
-     * @param pageSize   页数
+     * @param startCreateTime 创建开始时间
+     * @param endCreateTime   创建结束时间
+     * @param name            语料名称
+     * @param type            语料类型
+     * @param creator         创建者
+     * @param updater         更新者
+     * @param pageNumber      页码
+     * @param pageSize        页数
      * @return 返回操作结果，封装在Result对象中。
      */
     @PostMapping("/searchCorporaRecords")
-    public Result searchCorporaRecords(@RequestParam(required = false) String startDate,
-                                       @RequestParam(required = false) String endDate,
+    public Result searchCorporaRecords(@RequestParam(required = false) String startCreateTime,
+                                       @RequestParam(required = false) String endCreateTime,
+                                       @RequestParam(required = false) String name,
+                                       @RequestParam(required = false) String type,
                                        @RequestParam(required = false) String creator,
+                                       @RequestParam(required = false) String updater,
                                        @RequestParam(defaultValue = "1") int pageNumber,
                                        @RequestParam(defaultValue = "10") int pageSize) {
-        return dataService.searchCorporaRecords(startDate, endDate, creator, pageNumber, pageSize);
+        return dataService.searchCorporaRecords(startCreateTime, endCreateTime, name, type, creator, updater, pageNumber, pageSize);
     }
 
     /**

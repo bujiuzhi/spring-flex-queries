@@ -72,17 +72,30 @@ public class AudioConvert {
             fileInfo.put("CommonParams", commonParams);
 
             long fileSizeInBytes = Files.size(Paths.get(file.getAbsolutePath()));
-            fileInfo.put("FileSize", fileSizeInBytes + " 字节");
+            // 将文件大小转换为MB并保留两位小数
+            double fileSizeInMB = fileSizeInBytes / (1024.0 * 1024.0);
+            fileInfo.put("FileSize", String.format("%.2f MB", fileSizeInMB));
 
             long frameLength = fileFormat.getFrameLength();
             double durationInSeconds = (double) frameLength / format.getFrameRate();
-            fileInfo.put("Duration", String.format("%.2f 秒", durationInSeconds));
+            // 将文件时长转换为时分秒格式
+            String durationFormatted = formatDuration(durationInSeconds);
+            fileInfo.put("Duration", durationFormatted);
         } catch (UnsupportedAudioFileException | IOException e) {
             fileInfo.put("Error", "处理音频文件时出错: " + e.getMessage());
         }
 
         return fileInfo;
     }
+
+    // 辅助方法：将秒转换为时分秒格式
+    private static String formatDuration(double durationInSeconds) {
+        int hours = (int) durationInSeconds / 3600;
+        int minutes = (int) (durationInSeconds % 3600) / 60;
+        int seconds = (int) durationInSeconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
 
     // 主方法
     public static void main(String[] args) {

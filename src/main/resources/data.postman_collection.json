@@ -12,7 +12,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/data/searchVoiceRecords?startDate=2023-12-01&endDate=2023-12-20&pageNumber=2&pageSize=1",
+					"raw": "http://localhost:8080/data/searchVoiceRecords?fileName=1&pageNumber=1&pageSize=2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -24,20 +24,46 @@
 					],
 					"query": [
 						{
-							"key": "startDate",
-							"value": "2023-12-01"
+							"key": "startRecognitionTime",
+							"value": "2023-12-10",
+							"disabled": true
 						},
 						{
-							"key": "endDate",
-							"value": "2023-12-20"
+							"key": "endRecognitionTime",
+							"value": "2023-12-20",
+							"disabled": true
+						},
+						{
+							"key": "startCreateTime",
+							"value": "2023-12-01",
+							"disabled": true
+						},
+						{
+							"key": "endCreateTime",
+							"value": "2023-12-20",
+							"disabled": true
+						},
+						{
+							"key": "fileName",
+							"value": "1"
+						},
+						{
+							"key": "creator",
+							"value": "B",
+							"disabled": true
+						},
+						{
+							"key": "updater",
+							"value": "更新者C",
+							"disabled": true
 						},
 						{
 							"key": "pageNumber",
-							"value": "2"
+							"value": "1"
 						},
 						{
 							"key": "pageSize",
-							"value": "1"
+							"value": "2"
 						}
 					]
 				}
@@ -55,7 +81,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": []
+							"src": "/Users/bujiu/Downloads/test.mp3"
 						}
 					]
 				},
@@ -75,12 +101,57 @@
 			"response": []
 		},
 		{
+			"name": "deleteVoice",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/bujiu/Downloads/test.mp3"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/data/deleteVoice?filePath=/Users/bujiu/Downloads/audio/mp3/test.mp3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"deleteVoice"
+					],
+					"query": [
+						{
+							"key": "filePath",
+							"value": "/Users/bujiu/Downloads/audio/mp3/test.mp3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "saveVoiceRecord",
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"123456789\",\n    \"fileName\": \"example.wav\",\n    \"filePath\": \"/path/to/example.wav\",\n    \"fileSize\": \"1024\",\n    \"duration\": \"60\",\n    \"commonParams\": \"示例参数\",\n    \"content\": \"未识别\",\n    \"recognitionTime\": \"2024-01-01 12:00:00\",\n    \"creator\": \"admin\",\n    \"createTime\": \"2024-01-01 12:00:00\",\n    \"updater\": \"admin\",\n    \"updateTime\": \"2024-01-01 12:00:00\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8080/data/saveVoiceRecord?filePath=/test",
+					"raw": "http://localhost:8080/data/saveVoiceRecord",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -89,12 +160,6 @@
 					"path": [
 						"data",
 						"saveVoiceRecord"
-					],
-					"query": [
-						{
-							"key": "filePath",
-							"value": "/test"
-						}
 					]
 				}
 			},
@@ -106,7 +171,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/data/saveVoiceRecord?filePath=/test",
+					"raw": "http://localhost:8080/data/deleteVoiceRecord?id=123456789",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -114,12 +179,12 @@
 					"port": "8080",
 					"path": [
 						"data",
-						"saveVoiceRecord"
+						"deleteVoiceRecord"
 					],
 					"query": [
 						{
-							"key": "filePath",
-							"value": "/test"
+							"key": "id",
+							"value": "123456789"
 						}
 					]
 				}
@@ -131,8 +196,17 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"123456789\",\n    \"fileName\": \"updated_example.wav\",\n    \"filePath\": \"/path/to/updated_example.wav\",\n    \"fileSize\": \"2048\",\n    \"duration\": \"120\",\n    \"commonParams\": \"更新后的参数\",\n    \"content\": \"未识别\",\n    \"recognitionTime\": \"2024-01-02 12:00:00\",\n    \"creator\": \"admin\",\n    \"createTime\": \"2024-01-01 12:00:00\",\n    \"updater\": \"user\",\n    \"updateTime\": \"2024-01-02 12:00:00\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8080/data/saveVoiceRecord?filePath=/test",
+					"raw": "http://localhost:8080/data/updateVoiceRecord",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -140,13 +214,7 @@
 					"port": "8080",
 					"path": [
 						"data",
-						"saveVoiceRecord"
-					],
-					"query": [
-						{
-							"key": "filePath",
-							"value": "/test"
-						}
+						"updateVoiceRecord"
 					]
 				}
 			},
@@ -158,7 +226,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/data/saveVoiceRecord?filePath=/test",
+					"raw": "http://localhost:8080/data/recognizeVoice?id=123456789",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -166,12 +234,12 @@
 					"port": "8080",
 					"path": [
 						"data",
-						"saveVoiceRecord"
+						"recognizeVoice"
 					],
 					"query": [
 						{
-							"key": "filePath",
-							"value": "/test"
+							"key": "id",
+							"value": "123456789"
 						}
 					]
 				}
@@ -184,7 +252,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/data/searchCorporaRecords?endDate=2023-12-20",
+					"raw": "http://localhost:8080/data/searchCorporaRecords?updater=更新者C&pageSize=5&pageNumber=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -196,28 +264,41 @@
 					],
 					"query": [
 						{
-							"key": "startDate",
+							"key": "startCreateTime",
 							"value": "2023-12-01",
 							"disabled": true
 						},
 						{
-							"key": "endDate",
-							"value": "2023-12-20"
-						},
-						{
-							"key": "creator",
-							"value": "创建者A",
+							"key": "endCreateTime",
+							"value": "2023-12-20",
 							"disabled": true
 						},
 						{
-							"key": "pageNumber",
+							"key": "name",
 							"value": "1",
 							"disabled": true
 						},
 						{
-							"key": "pageSize",
-							"value": "10",
+							"key": "type",
+							"value": "B",
 							"disabled": true
+						},
+						{
+							"key": "creator",
+							"value": "A",
+							"disabled": true
+						},
+						{
+							"key": "updater",
+							"value": "更新者C"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						},
+						{
+							"key": "pageNumber",
+							"value": "1"
 						}
 					]
 				}
@@ -260,7 +341,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": \"2\",\n    \"name\": \"新语料\",\n    \"type\": \"新类型\",\n    \"annotation\": \"注释\",\n    \"creator\": \"张三\",\n    \"createTime\": \"2023-12-25 00:00:00\",\n    \"updater\": \"张三\",\n    \"updateTime\": \"2023-12-25 00:00:00\"\n}",
+					"raw": "{\n    \"id\": \"1704416864\",\n    \"name\": \"新语料\",\n    \"type\": \"新类型\",\n    \"annotation\": \"注释\",\n    \"creator\": \"张三\",\n    \"createTime\": \"2023-12-25 00:00:00\",\n    \"updater\": \"张三\",\n    \"updateTime\": \"2023-12-25 00:00:00\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -288,7 +369,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/data/deleteCorpora?id=1",
+					"raw": "http://localhost:8080/data/deleteCorpora?id=1704416864",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -301,7 +382,7 @@
 					"query": [
 						{
 							"key": "id",
-							"value": "1"
+							"value": "1704416864"
 						}
 					]
 				}

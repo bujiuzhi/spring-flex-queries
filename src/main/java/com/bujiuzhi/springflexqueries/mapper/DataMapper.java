@@ -6,6 +6,7 @@ import com.bujiuzhi.springflexqueries.utils.DataSqlProvider;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据访问接口
@@ -15,25 +16,22 @@ import java.util.List;
 public interface DataMapper {
 
     /**
-     * 根据日期范围搜索语音文件记录。
-     * 使用动态SQL生成方法。
+     * 根据提供的参数搜索语音文件记录。
      *
-     * @param startDate 开始日期
-     * @param endDate   结束日期
-     * @return 语音文件记录列表
+     * @param params 包含搜索参数的Map
+     * @return 符合条件的语音文件记录列表
      */
     @SelectProvider(type = DataSqlProvider.class, method = "searchVoiceRecords")
-    List<StgVoiceRecognition> searchVoiceRecords(String startDate, String endDate, int pageNumber, int pageSize);
+    List<StgVoiceRecognition> searchVoiceRecords(Map<String, Object> params);
 
     /**
      * 计算符合条件的语音文件记录总数。
      *
-     * @param startDate 开始日期
-     * @param endDate   结束日期
-     * @return 记录总数
+     * @param params 包含搜索参数的Map
+     * @return 符合条件的记录总数
      */
     @SelectProvider(type = DataSqlProvider.class, method = "countVoiceRecords")
-    int countVoiceRecords(@Param("startDate") String startDate, @Param("endDate") String endDate);
+    int countVoiceRecords(Map<String, Object> params);
 
     /**
      * 插入语音文件记录
@@ -68,27 +66,30 @@ public interface DataMapper {
     void deleteVoiceRecord(@Param("id") String id);
 
     /**
-     * 计算符合条件的语料库记录总数。
+     * 根据文件路径删除语音文件记录
      *
-     * @param startDate 开始日期
-     * @param endDate   结束日期
-     * @param creator   上传人
-     * @return 记录总数
+     * @param filePath 文件路径
      */
-    @SelectProvider(type = DataSqlProvider.class, method = "countCorporaRecords")
-    int countCorporaRecords(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("creator") String creator);
+    @Delete("DELETE FROM test.stg_voice_recognition WHERE file_path LIKE CONCAT('%', #{filePath}, '%')")
+    void deleteVoiceRecordByFilePath(@Param("filePath") String filePath);
 
     /**
-     * 根据日期范围和上传人搜索语料库记录。
-     * 使用动态SQL生成方法。
+     * 根据多个条件搜索语料库记录。
      *
-     * @param startDate 开始日期
-     * @param endDate   结束日期
-     * @param creator   上传人
-     * @return 语料库记录列表
+     * @param params 包含搜索参数的Map
+     * @return 符合条件的语料库记录列表
      */
     @SelectProvider(type = DataSqlProvider.class, method = "searchCorporaRecords")
-    List<StgCorpora> searchCorporaRecords(String startDate, String endDate, String creator, int pageNumber, int pageSize);
+    List<StgCorpora> searchCorporaRecords(Map<String, Object> params);
+
+    /**
+     * 计算符合条件的语料库记录总数。
+     *
+     * @param params 包含搜索参数的Map
+     * @return 符合条件的记录总数
+     */
+    @SelectProvider(type = DataSqlProvider.class, method = "countCorporaRecords")
+    int countCorporaRecords(Map<String, Object> params);
 
     /**
      * 插入新的语料库记录。
