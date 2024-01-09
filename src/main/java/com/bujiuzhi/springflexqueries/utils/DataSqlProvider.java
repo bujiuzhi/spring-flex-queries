@@ -32,13 +32,18 @@ public class DataSqlProvider {
         whereConditions.forEach(sql::WHERE);
 
         // 添加分页逻辑
+        // 构建最终的SQL查询
+        StringBuilder finalSql = new StringBuilder(sql.toString());
+
+        // 手动添加LIMIT和OFFSET
         if (params.containsKey("pageNumber") && params.containsKey("pageSize")) {
             int pageNumber = (Integer) params.get("pageNumber");
             int pageSize = (Integer) params.get("pageSize");
-            sql.LIMIT(pageSize).OFFSET((pageNumber - 1) * pageSize);
+            finalSql.append(" LIMIT ").append(pageSize)
+                    .append(" OFFSET ").append((pageNumber - 1) * pageSize);
         }
 
-        return sql.toString();
+        return finalSql.toString();
     }
 
     /**
@@ -142,14 +147,18 @@ public class DataSqlProvider {
         List<String> whereConditions = generateSqlConditions(params);
         whereConditions.forEach(sql::WHERE);
 
-        // 添加分页逻辑
+        // 构建最终的SQL查询
+        StringBuilder finalSql = new StringBuilder(sql.toString());
+
+        // 手动添加LIMIT和OFFSET
         if (params.containsKey("pageNumber") && params.containsKey("pageSize")) {
             int pageNumber = (Integer) params.get("pageNumber");
             int pageSize = (Integer) params.get("pageSize");
-            sql.LIMIT(pageSize).OFFSET((pageNumber - 1) * pageSize);
+            finalSql.append(" LIMIT ").append(pageSize)
+                    .append(" OFFSET ").append((pageNumber - 1) * pageSize);
         }
 
-        return sql.toString();
+        return finalSql.toString();
     }
 
     /**

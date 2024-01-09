@@ -7,6 +7,7 @@ import com.bujiuzhi.springflexqueries.pojo.StgVoiceRecognition;
 import com.bujiuzhi.springflexqueries.service.DataService;
 import com.bujiuzhi.springflexqueries.utils.AudioConvert;
 import com.bujiuzhi.springflexqueries.utils.IatUtil;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -154,23 +155,31 @@ public class DataServiceImpl implements DataService {
     @Override
     public Result deleteVoice(String filePath) {
         try {
+            // 提取文件名，假设文件名是路径的最后一部分
+            String fileName = Paths.get(filePath).getFileName().toString();
+            // 从文件名中去除扩展名
+            String baseName = FilenameUtils.getBaseName(fileName);
+
             // 删除相关文件
-            Path fileToDelete = Paths.get(filePath);
-            if (Files.exists(fileToDelete)) {
-                Files.delete(fileToDelete);
-            }
-            //若以.mp3结尾还需删除.wav文件
-            if (filePath.endsWith(".mp3")) {
-                String wavFilePath = filePath.replace("mp3", "wav");
-                Path wavFileToDelete = Paths.get(wavFilePath);
-                if (Files.exists(wavFileToDelete)) {
-                    Files.delete(wavFileToDelete);
-                }
+            // 假设文件存储的目录是已知的
+            String directoryPath = "/Users/bujiu/Downloads/audio";
+            String mp3FilePath = directoryPath + "/mp3/" + baseName + ".mp3";
+            String wavFilePath = directoryPath + "/wav/" + baseName + ".wav";
+
+            // 删除MP3文件
+            Path mp3FileToDelete = Paths.get(mp3FilePath);
+            if (Files.exists(mp3FileToDelete)) {
+                Files.delete(mp3FileToDelete);
             }
 
-            // 删除数据库中包含这个路径的所有记录
-            // 注意：这里假设filePath是完整的文件名，包括扩展名
-            dataMapper.deleteVoiceRecordByFilePath(filePath);
+            // 删除WAV文件
+            Path wavFileToDelete = Paths.get(wavFilePath);
+            if (Files.exists(wavFileToDelete)) {
+                Files.delete(wavFileToDelete);
+            }
+
+            // 删除数据库记录
+            dataMapper.deleteVoiceRecordByFileName(baseName);
 
             return Result.success("语音文件及其记录删除成功");
         } catch (IOException e) {
@@ -254,7 +263,17 @@ public class DataServiceImpl implements DataService {
 //        }
         StgVoiceRecognition record = dataMapper.findVoiceRecordById(id);
         if (record != null && "未识别".equals(record.getContent())) {
-            String recognitionResult = IatUtil.start(record.getFilePath());
+            //路径可能有两个，我们只需要.wav结尾的那个
+            String[] filePaths = record.getFilePath().split(";");
+            String wavFilePath = "";
+            for (String filePath : filePaths) {
+                if (filePath.endsWith(".wav")) {
+                    wavFilePath = filePath;
+                    break;
+                }
+            }
+            String recognitionResult = IatUtil.start(wavFilePath);
+//            String recognitionResult = IatUtil.start(record.getFilePath());
             record.setContent(recognitionResult);
             record.setRecognitionTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             record.setUpdater("admin");

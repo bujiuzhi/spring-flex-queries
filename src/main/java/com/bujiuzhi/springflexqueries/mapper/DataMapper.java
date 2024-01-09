@@ -66,12 +66,13 @@ public interface DataMapper {
     void deleteVoiceRecord(@Param("id") String id);
 
     /**
-     * 根据文件路径删除语音文件记录
+     * 根据文件名删除语音文件记录
      *
-     * @param filePath 文件路径
+     * @param fileName 文件路径
      */
-    @Delete("DELETE FROM test.stg_voice_recognition WHERE file_path LIKE CONCAT('%', #{filePath}, '%')")
-    void deleteVoiceRecordByFilePath(@Param("filePath") String filePath);
+    @Delete("DELETE FROM test.stg_voice_recognition WHERE file_name = #{fileName}")
+    void deleteVoiceRecordByFileName(@Param("fileName") String fileName);
+
 
     /**
      * 根据多个条件搜索语料库记录。

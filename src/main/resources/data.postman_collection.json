@@ -107,13 +107,7 @@
 				"header": [],
 				"body": {
 					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/Users/bujiu/Downloads/test.mp3"
-						}
-					]
+					"formdata": []
 				},
 				"url": {
 					"raw": "http://localhost:8080/data/deleteVoice?filePath=/Users/bujiu/Downloads/audio/mp3/test.mp3",
