@@ -1,6 +1,7 @@
 package com.bujiuzhi.springflexqueries.mapper;
 
 import com.bujiuzhi.springflexqueries.pojo.StgCorpora;
+import com.bujiuzhi.springflexqueries.pojo.StgMessage;
 import com.bujiuzhi.springflexqueries.pojo.StgVoiceRecognition;
 import com.bujiuzhi.springflexqueries.utils.DataSqlProvider;
 import org.apache.ibatis.annotations.*;
@@ -117,5 +118,23 @@ public interface DataMapper {
      */
     @Delete("DELETE FROM test.stg_corpora WHERE id = #{id}")
     void deleteCorpora(@Param("id") String id);
+
+    /**
+     * 根据提供的参数搜索消息记录。
+     *
+     * @param params 包含搜索参数的Map
+     * @return 符合条件的消息记录列表
+     */
+    @SelectProvider(type = DataSqlProvider.class, method = "searchMessages")
+    List<StgMessage> searchMessages(Map<String, Object> params);
+
+    /**
+     * 计算符合条件的消息记录总数。
+     *
+     * @param params 包含搜索参数的Map
+     * @return 符合条件的记录总数
+     */
+    @SelectProvider(type = DataSqlProvider.class, method = "countMessages")
+    int countMessages(Map<String, Object> params);
 
 }

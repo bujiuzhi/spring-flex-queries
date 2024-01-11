@@ -179,4 +179,34 @@ public class DataController {
     public Result deleteCorpora(@Valid @NotBlank @RequestParam String id) {
         return dataService.deleteCorpora(id);
     }
+
+    /**
+     * 根据多个条件搜索消息记录。
+     * 支持通过沟通渠道、交易员、用户、开始时间范围、发送人和接收人等条件进行搜索。
+     * 还包括分页功能。
+     *
+     * @param channel        沟通渠道
+     * @param trader         交易员
+     * @param user           用户
+     * @param startStartTime 开始时间的起始范围
+     * @param endStartTime   开始时间的结束范围
+     * @param sender         发送人
+     * @param receiver       接收人
+     * @param pageNumber     页码
+     * @param pageSize       每页记录数
+     * @return 返回操作结果，封装在Result对象中。
+     */
+    @PostMapping("/searchMessages")
+    public Result searchMessages(@RequestParam(required = false) String channel,
+                                 @RequestParam(required = false) String trader,
+                                 @RequestParam(required = false) String user,
+                                 @RequestParam(required = false) String startStartTime,
+                                 @RequestParam(required = false) String endStartTime,
+                                 @RequestParam(required = false) String sender,
+                                 @RequestParam(required = false) String receiver,
+                                 @RequestParam(defaultValue = "1") int pageNumber,
+                                 @RequestParam(defaultValue = "10") int pageSize) {
+        return dataService.searchMessages(channel, trader, user, startStartTime, endStartTime, sender, receiver, pageNumber, pageSize);
+    }
+
 }

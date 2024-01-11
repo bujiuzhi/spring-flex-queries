@@ -3,6 +3,7 @@ package com.bujiuzhi.springflexqueries.service.impl;
 import com.bujiuzhi.springflexqueries.mapper.DataMapper;
 import com.bujiuzhi.springflexqueries.pojo.Result;
 import com.bujiuzhi.springflexqueries.pojo.StgCorpora;
+import com.bujiuzhi.springflexqueries.pojo.StgMessage;
 import com.bujiuzhi.springflexqueries.pojo.StgVoiceRecognition;
 import com.bujiuzhi.springflexqueries.service.DataService;
 import com.bujiuzhi.springflexqueries.utils.AudioConvert;
@@ -195,7 +196,6 @@ public class DataServiceImpl implements DataService {
             return Result.error("语音文件删除失败: " + e.getMessage());
         }
     }
-
 
     /**
      * 保存语音文件记录
@@ -427,4 +427,59 @@ public class DataServiceImpl implements DataService {
         dataMapper.deleteCorpora(id);
         return Result.success("删除成功");
     }
+
+    /**
+     * 根据多个条件搜索消息记录。
+     * 支持根据沟通渠道、交易员、用户、开始时间范围、发送人和接收人等条件进行搜索。
+     *
+     * @param channel        沟通渠道
+     * @param trader         交易员
+     * @param user           用户
+     * @param startStartTime 开始时间范围的开始时间
+     * @param endStartTime   开始时间范围的结束时间
+     * @param sender         发送人
+     * @param receiver       接收人
+     * @param pageNumber     页码
+     * @param pageSize       页数
+     * @return 操作结果
+     */
+    @Override
+    public Result searchMessages(String channel, String trader, String user, String startStartTime, String endStartTime, String sender, String receiver, int pageNumber, int pageSize) {
+        // 准备查询参数
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("channel", channel);
+        searchParams.put("trader", trader);
+        searchParams.put("user", user);
+        searchParams.put("startStartTime", startStartTime);
+        searchParams.put("endStartTime", endStartTime);
+        searchParams.put("sender", sender);
+        searchParams.put("receiver", receiver);
+        searchParams.put("pageNumber", pageNumber);
+        searchParams.put("pageSize", pageSize);
+
+        // 调用Mapper进行查询
+        List<StgMessage> messages = dataMapper.searchMessages(searchParams);
+        if (messages.isEmpty()) {
+            return Result.error("没有找到符合条件的消息记录");
+        }
+
+        // 计算总记录数
+        int totalRecords = dataMapper.countMessages(searchParams);
+        int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
+
+        // 封装分页信息
+        Map<String, Object> paginationInfo = new HashMap<>();
+        paginationInfo.put("pageNumber", pageNumber);
+        paginationInfo.put("pageSize", pageSize);
+        paginationInfo.put("totalRecords", totalRecords);
+        paginationInfo.put("totalPages", totalPages);
+
+        // 封装响应数据
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("list", messages);
+        responseData.put("pagination", paginationInfo);
+
+        return Result.success(responseData);
+    }
+
 }

@@ -81,7 +81,7 @@
 						{
 							"key": "file",
 							"type": "file",
-                          "src": []
+							"src": []
 						}
 					]
 				},
@@ -377,6 +377,70 @@
 						{
 							"key": "id",
 							"value": "1704416864"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchMessages",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/data/searchMessages?trader=五&pageSize=5&pageNumber=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"searchMessages"
+					],
+					"query": [
+						{
+							"key": "startStartTime",
+							"value": "2023-12-01",
+							"disabled": true
+						},
+						{
+							"key": "endStartTime",
+							"value": "2023-12-20",
+							"disabled": true
+						},
+						{
+							"key": "channel",
+							"value": "Q",
+							"disabled": true
+						},
+						{
+							"key": "trader",
+							"value": "五"
+						},
+						{
+							"key": "user",
+							"value": "八",
+							"disabled": true
+						},
+						{
+							"key": "sender",
+							"value": "三",
+							"disabled": true
+						},
+						{
+							"key": "receiver",
+							"value": "八",
+							"disabled": true
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						},
+						{
+							"key": "pageNumber",
+							"value": "1"
 						}
 					]
 				}

@@ -1,6 +1,7 @@
 package com.bujiuzhi.springflexqueries.utils;
 
 import com.bujiuzhi.springflexqueries.pojo.StgCorpora;
+import com.bujiuzhi.springflexqueries.pojo.StgMessage;
 import com.bujiuzhi.springflexqueries.pojo.StgVoiceRecognition;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -226,6 +227,50 @@ public class DataSqlProvider {
             }
         });
         sql.WHERE("id = #{id}");
+        return sql.toString();
+    }
+
+
+    /**
+     * 动态构建SQL查询语句，用于搜索符合条件的消息记录。
+     *
+     * @param params 包含所有搜索条件的Map
+     * @return 返回SQL查询语句。
+     */
+    public String searchMessages(Map<String, Object> params) {
+        SQL sql = new SQL();
+        sql.SELECT(generateSelectFieldsWithAliases(StgMessage.class)).FROM("test.stg_message");
+
+        // 动态生成WHERE子句
+        List<String> whereConditions = generateSqlConditions(params);
+        whereConditions.forEach(sql::WHERE);
+
+        // 添加分页逻辑
+        StringBuilder finalSql = new StringBuilder(sql.toString());
+        if (params.containsKey("pageNumber") && params.containsKey("pageSize")) {
+            int pageNumber = (Integer) params.get("pageNumber");
+            int pageSize = (Integer) params.get("pageSize");
+            finalSql.append(" LIMIT ").append(pageSize)
+                    .append(" OFFSET ").append((pageNumber - 1) * pageSize);
+        }
+
+        return finalSql.toString();
+    }
+
+    /**
+     * 动态构建SQL查询语句，用于计算符合条件的消息记录总数。
+     *
+     * @param params 包含所有搜索条件的Map
+     * @return 返回SQL查询语句。
+     */
+    public String countMessages(Map<String, Object> params) {
+        SQL sql = new SQL();
+        sql.SELECT("COUNT(*)").FROM("test.stg_message");
+
+        // 动态生成WHERE子句
+        List<String> whereConditions = generateSqlConditions(params);
+        whereConditions.forEach(sql::WHERE);
+
         return sql.toString();
     }
 
