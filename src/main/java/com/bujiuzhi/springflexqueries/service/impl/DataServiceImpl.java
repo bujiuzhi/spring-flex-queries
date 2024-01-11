@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -111,26 +112,34 @@ public class DataServiceImpl implements DataService {
                 throw new IOException("创建目标文件夹失败");
             }
 
-            // 将上传的文件保存到指定目录
-            File sourceFile = new File(mp3Folder, originalFilename);
-            file.transferTo(sourceFile);
+            String filePaths;
+            File sourceFile;
 
-            String filePaths = sourceFile.getAbsolutePath();
-
-            // 如果是MP3文件，转换为WAV格式并拼接路径
+            // 根据文件类型处理文件
             if (fileExtension.equals("mp3")) {
+                sourceFile = new File(mp3Folder, originalFilename);
+                file.transferTo(sourceFile);
                 File processedFile = AudioConvert.convertToWav(sourceFile);
-                filePaths += ";" + processedFile.getAbsolutePath(); // 使用分号分隔两个路径
+                filePaths = sourceFile.getAbsolutePath() + ";" + processedFile.getAbsolutePath(); // 保存MP3和WAV文件的路径
+
+                // 将转换后的WAV文件保存到WAV目录
+                Files.copy(processedFile.toPath(), new File(wavFolder, processedFile.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } else if (fileExtension.equals("wav")) {
+                sourceFile = new File(wavFolder, originalFilename);
+                file.transferTo(sourceFile);
+                filePaths = sourceFile.getAbsolutePath(); // 仅保存WAV文件的路径
+            } else {
+                return Result.error("上传失败，不支持的文件格式");
             }
 
             // 获取文件信息
-            Map<String, String> fileInfo = AudioConvert.getAudioFileInfo(filePaths.split(";")[0]); // 使用第一个路径获取文件信息
+            Map<String, String> fileInfo = AudioConvert.getAudioFileInfo(filePaths.split(";")[0]);
 
             // 创建语音文件记录
             StgVoiceRecognition record = new StgVoiceRecognition();
             record.setId(generateId());
             record.setFileName(originalFilename.substring(0, originalFilename.lastIndexOf(".")));
-            record.setFilePath(filePaths); // 存储拼接的路径
+            record.setFilePath(filePaths);
             record.setFileSize(fileInfo.get("FileSize"));
             record.setDuration(fileInfo.get("Duration"));
             record.setCommonParams(fileInfo.get("CommonParams"));
@@ -274,28 +283,15 @@ public class DataServiceImpl implements DataService {
             }
             String recognitionResult = IatUtil.start(wavFilePath);
 //            String recognitionResult = IatUtil.start(record.getFilePath());
+            if (recognitionResult == null) recognitionResult = "未识别";
             record.setContent(recognitionResult);
             record.setRecognitionTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             record.setUpdater("admin");
             record.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             dataMapper.updateVoiceRecord(record);
-            return Result.success("语音识别完成，内容已更新,识别结果为：" + recognitionResult);
+            return Result.success(wavFilePath + "语音识别完成，内容已更新,识别结果为：" + recognitionResult);
         }
         return Result.error("找不到指定的记录或记录已识别");
-    }
-
-    /**
-     * 将MultipartFile转换为File
-     *
-     * @param multipartFile MultipartFile文件
-     * @param filename      文件名
-     * @return 转换后的File对象
-     * @throws IOException
-     */
-    private File convertToFile(MultipartFile multipartFile, String filename) throws IOException {
-        File file = new File(System.getProperty("java.io.tmpdir") + "/" + filename);
-        multipartFile.transferTo(file);
-        return file;
     }
 
     /**

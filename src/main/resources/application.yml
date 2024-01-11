@@ -4,6 +4,11 @@ spring:
     url: jdbc:mysql://localhost:3306
     username: root
     password: '19990102'
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 logging:
   level:
     org:

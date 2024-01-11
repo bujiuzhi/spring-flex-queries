@@ -81,7 +81,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/Users/bujiu/Downloads/test.mp3"
+                          "src": []
 						}
 					]
 				},
