@@ -100,4 +100,7 @@ VALUES ('20230101010000-MFSFMK202309270001-1dot0', 'MFSFMK202309270001', '1.0', 
 SELECT *
 FROM test.stg_model_job;
 
-
+-- 查询job_status的不同值数量
+SELECT job_status, COUNT(1) AS cnt
+FROM test.stg_model_job
+GROUP BY job_status;

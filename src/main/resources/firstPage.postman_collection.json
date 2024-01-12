@@ -1,0 +1,340 @@
+{
+  "info": {
+    "_postman_id": "cb684f03-6657-44fb-b9d5-7329e5b4061e",
+    "name": "firstPage",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31082839"
+  },
+  "item": [
+    {
+      "name": "taskCountToday",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/taskCountToday",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "taskCountToday"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "utilizationRateToday",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/utilizationRateToday",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "utilizationRateToday"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "realTimeAlarms",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/realTimeAlarms",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "realTimeAlarms"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "addRealTimeAlarm",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/addRealTimeAlarm?eventId=EVT1001&eventDealer=张二麻子",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "addRealTimeAlarm"
+          ],
+          "query": [
+            {
+              "key": "eventId",
+              "value": "EVT1001"
+            },
+            {
+              "key": "eventDealer",
+              "value": "张二麻子"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "todayEventTracking",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/todayEventTracking",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "todayEventTracking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "thisWeekEventTracking",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/thisWeekEventTracking",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "thisWeekEventTracking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "thisMonthEventTracking",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/thisMonthEventTracking",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "thisMonthEventTracking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "thisYearEventTracking",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/thisYearEventTracking",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "thisYearEventTracking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "callVolumeToday",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/callVolumeToday",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "callVolumeToday"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "dataSourceTables",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/dataSourceTables",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "dataSourceTables"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "riskFactors",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/riskFactors",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "riskFactors"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "businessRules",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/businessRules",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "businessRules"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "riskTypes",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/riskTypes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "riskTypes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "intelligentAgents",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/intelligentAgents",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "intelligentAgents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "agentStatusCounts",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/agentStatusCounts",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "agentStatusCounts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "modelStatusCounts",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/firstPage/modelStatusCounts",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "firstPage",
+            "modelStatusCounts"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

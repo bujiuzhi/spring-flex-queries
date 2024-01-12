@@ -35,3 +35,6 @@ VALUES ('alg001', 'K-MEANS', 'K-MEANS 聚类算法', '聚类算法', '{"clusters
 -- 查询数据
 SELECT *
 FROM test.stg_algorithm_param;
+
+
+

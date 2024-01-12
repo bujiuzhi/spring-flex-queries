@@ -79,4 +79,37 @@ public interface FirstPageMapper {
     Map<String, Object> getThisYearEventTracking();
 
     // 其他 SQL 查询和方法定义 ...
+
+    // 获取当日调用量
+    @Select("SELECT COUNT(*) AS count FROM test.pt_comm_server_tran WHERE tran_ID LIKE CONCAT(DATE_FORMAT(CURDATE(), '%Y%m%d'), '%')")
+    Map<String, Object> countCallVolumeToday();
+
+    // 获取数据源表数量
+    @Select("SELECT COUNT(*) AS count FROM test.risk_center_table WHERE is_rule_dataset = 0")
+    Map<String, Object> countDataSourceTables();
+
+    // 获取风险因子数量
+    @Select("SELECT COUNT(*) AS count FROM test.risk_center_table WHERE is_rule_dataset = 1")
+    Map<String, Object> countRiskFactors();
+
+    // 获取业务规则数量
+    @Select("SELECT COUNT(*) AS count FROM test.stg_rule_info")
+    Map<String, Object> countBusinessRules();
+
+    // 获取风险类型数量
+    @Select("SELECT COUNT(*) AS count FROM test.stg_model_job")
+    Map<String, Object> countRiskTypes();
+
+    // 获取智能代理数量
+    @Select("SELECT COUNT(*) AS count FROM test.stg_agency_table")
+    Map<String, Object> countIntelligentAgents();
+
+    // 获取代理的不同状态及其数量
+    @Select("SELECT agency_status, COUNT(1) AS count FROM test.stg_agency_table GROUP BY agency_status")
+    List<Map<String, Object>> findAgentStatusCounts();
+
+    // 获取模型的不同状态及其数量
+    @Select("SELECT job_status, COUNT(1) AS count FROM test.stg_model_job GROUP BY job_status")
+    List<Map<String, Object>> findModelStatusCounts();
+
 }
